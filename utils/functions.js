@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const { Guild, Profile } = require('../models');
 
@@ -64,5 +66,17 @@ module.exports = client => {
         } else {
             return text;
         }
+    };
+
+    client.avaliableCommands = () => {
+        const directoryPath = path.join(__dirname, '../commands');
+        //passsing directoryPath and callback function
+        let returnList = [];
+        let filesList = fs.readdirSync(directoryPath);
+
+        filesList.forEach(item => {
+            returnList.push(item.split(".js")[0]);
+        });
+        return returnList;
     };
 };

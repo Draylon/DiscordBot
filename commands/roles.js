@@ -2,6 +2,8 @@ const { RichEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
+    if (!message.member.hasPermission('ADMINISTRATOR')) return;
+
     const { prefix } = client.config;
 
     await message.delete().catch(O_o=>{});

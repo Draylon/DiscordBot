@@ -42,7 +42,14 @@ module.exports = async (client, message) => {
     const command = args.shift().toLowerCase();
 
     const cmd = client.commands.get(command);
-    if (!cmd) return;
+    var cmdStrings = "";
+    client.avaliableCommands().forEach(element => {
+       cmdStrings+=element+"\n";
+    });
+    if (!cmd){
+        message.delete();
+        return message.channel.send("Command >"+command+"< not found!\n__Avaliable commands__\n\n"+cmdStrings).then(d_msg=>d_msg.delete(25000));
+    }
 
     cmd.run(client, message, args, settings);
 };

@@ -1,5 +1,4 @@
-const path = require('path');
-const fs = require('fs');
+
 exports.run = async (client, message, args, settings) => {
 
     if (!message.member.hasPermission('ADMINISTRATOR')) return;
@@ -24,17 +23,18 @@ exports.run = async (client, message, args, settings) => {
                 if(updated == 'all'){
                     
                     try{
-                        var filesList = await getAllFiles('');
+                        var filesList = await client.avaliableCommands();
                         filesList.forEach(cmdName => {
-                            delete require.cache[require.resolve(`./${cmdName.toLowerCase()}`)];
+                            delete require.cache[require.resolve(`./${cmdName.toLowerCase()}.js`)];
                         });
                         client.commands.deleteAll();
                         filesList.forEach(cmdName =>{
-                            const pullNewCommand = require(`./${cmdName.toLowerCase()}`);
-                            client.commands.set(cmdName.split('.js')[0], pullNewCommand);
+                            const pullNewCommand = require(`./${cmdName.toLowerCase()}.js`);
+                            client.commands.set(cmdName, pullNewCommand);
                         });
                         message.delete();
                         message.channel.send("All commands reloaded!").then(msg => msg.delete(3000));
+                        console.clear();
                     }catch(err){
                         message.channel.send("Error occurred: "+err);
                         console.log(err);
@@ -50,7 +50,7 @@ exports.run = async (client, message, args, settings) => {
                         return message.channel.send("Error reloading "+updated.toUpperCase()+"!!!");
                     }
                     message.delete();
-                    message.channel.send("Command "+updated.toUpperCase()+" Reloaded!");
+                    message.channel.send("Command "+updated.toUpperCase()+" Reloaded!").then(msg => msg.delete(3000));;
                 }
             }
             break;
@@ -135,15 +135,3 @@ exports.run = async (client, message, args, settings) => {
 exports.help = {
     name: 'config'
 };
-
-async function getAllFiles(dirName){
-    const directoryPath = path.join(__dirname, dirName);
-    //passsing directoryPath and callback function
-    let returnList = [];
-    let filesList = fs.readdirSync(directoryPath);
-
-    filesList.forEach(item => {
-        returnList.push(item);
-    });
-    return returnList;
-}

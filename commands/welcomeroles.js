@@ -2,6 +2,7 @@ const { RichEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
+    if (!message.member.hasPermission('ADMINISTRATOR')) return;
     /*
         1) Use the messageReactionAdd and messageReactionRemove events to add/remove users roles
         2) Remove the awaitReactions() function as we won't need that anymore

@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const asciiChart = require('asciichart');
 const { RichEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
@@ -6,14 +7,10 @@ exports.run = async (client, message, args) => {
     var coin_name = args.join(' '),
     image_link = "",
     color = 0x000;
-    const filter = (reaction, user) => ['📈','🇦', '🇧', '🇨'].includes(reaction.emoji.name) && user.id === message.author.id;
+    const filter = (reaction, user) => ['❌','📈','🇦', '🇧', '🇨'].includes(reaction.emoji.name) && user.id === message.author.id;
     await message.delete().catch(O_o=>{});
     if(coin_name == ''){
         const { prefix } = client.config;
-
-        const a = message.guild.roles.get('699580541577461801'); // Verified
-        const b = message.guild.roles.get('711218719652577381'); // UDESC
-        const c = message.guild.roles.get('711659664743333949'); // Developer
 
         const embed = new RichEmbed()
             .setTitle('Avalilable Coins')
@@ -64,7 +61,7 @@ exports.run = async (client, message, args) => {
                 }
                 msg.delete().catch(err=>console.log(err));
                 //PRA FRENTE DAQUI
-                createMessage(filter,message,coin_name,image_link,color);
+                createMessage(client,filter,message,coin_name,image_link,color);
             }).catch(collected => {
                 msg.delete();
                 return message.channel.send(`No coin selected!`).then(msg => msg.delete(5000));
@@ -88,7 +85,7 @@ exports.run = async (client, message, args) => {
                 image_link="";
                 color=0x999;
         }
-        createMessage(filter,message,coin_name,image_link,color);
+        createMessage(client,filter,message,coin_name,image_link,color);
     }
     
     
@@ -99,8 +96,8 @@ exports.help = {
     name: 'fetch_coin'
 };
 
-async function createMessage(filter,message,coin_name,image_link,color){
-    
+async function createMessage(client,filter,message,coin_name,image_link,color){
+    var priceHistoryString = await getValuesList(client,coin_name);
     try{
         //message.delete().catch(err=>{});
         message.channel.send("fetching "+coin_name).then(async msg =>{
@@ -119,40 +116,62 @@ async function createMessage(filter,message,coin_name,image_link,color){
                         
                     `)
                     .setColor(color)
-                    .setFooter("Press 📈 to generate a graph\nPrice History: (wip - precisa do mongodb)");
+                    .setFooter("Press 📈 to generate a graph\nPrice History:\n"+priceHistoryString);
+                    client.updateCCValues(api_data.data.id,api_data.data.priceUsd);
                     msg.delete().catch(err=>console.log(err));
                     message.channel.send(embed).then(async msg_createGraph => {
                         await msg_createGraph.react('📈');
                         msg_createGraph.awaitReactions(filter, {
                             max: 1,
-                            time: 10000,
+                            time: 40000,
                             errors: ['time']
-                        }).then(collected => {
+                        }).then(async collected => {
                             const reaction = collected.first();
                             switch (reaction.emoji.name) {
                                 case '📈':
                                     msg_createGraph.delete().catch(err=>console.error("Deleting createGraph error! "+err));
-                                    message.channel.send("Fazer algo mais bem elaborado aqui\nListando os valores a cada 20 segundos:").then(async msg_updateGraph=>{
-                                        var priceList = "",
-                                        intv_count=0,
+                                    var value_list=await buildGraph(client,coin_name,40);
+                                    message.channel.send(`${value_list}`).then(async msg_updateGraph=>{
+                                        var intv_count=0,
                                         intv_ = setInterval( async ()=>{
                                             intv_count+=1;
+                                            if(intv_count>20){
+                                                msg_updateGraph.edit("Timed out").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));clearInterval(intv_);
+                                            }
                                             let dataResponse = await fetch('https://api.coincap.io/v2/assets/'+coin_name)
                                             .then(res => res.text())
-                                            .then(json => {
+                                            .then(async json => {
                                                 try {
                                                     api_data = JSON.parse(json);
-                                                    priceList+=api_data.data.priceUsd+"\n";
-                                                    msg_updateGraph.edit("----Valor----\n"+priceList);
+                                                    client.updateCCValues(api_data.data.id,api_data.data.priceUsd);
+                                                    value_list=await buildGraph(client,coin_name,40);
+                                                    msg_updateGraph.edit(`${value_list}`);
                                                 }catch(err){
                                                     console.error(error);
                                                     msg.delete();
                                                     message.channel.send("Error happened").then(msg =>{msg.delete(3000);});
                                                 }
-                                                if(intv_count>5){
-                                                    msg_updateGraph.edit("Stop printing").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));clearInterval(intv_);}
                                             });
-                                        },1000*20);
+                                        },1000*15);
+                                        await msg_updateGraph.react('❌');
+                                        msg_updateGraph.awaitReactions(filter, {
+                                            max: 1,
+                                            time: ((15000*20)+100),
+                                            errors: ['time']
+                                        }).then(collected => { 
+                                            const reaction = collected.first();
+                                            switch (reaction.emoji.name) {
+                                                case '❌':
+                                                    clearInterval(intv_);
+                                                    msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));
+                                                    break;
+                                            }
+                                        }).catch(collected => {
+                                            clearInterval(intv_);
+                                            msg_createGraph.reactions.forEach(react=>react.removeAll());
+                                            msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));
+                                                    
+                                        });
                                     });
                                     break;
                                 default:
@@ -160,7 +179,7 @@ async function createMessage(filter,message,coin_name,image_link,color){
                             }
                         }).catch(collected => {
                             //msg_createGraph.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                            embed.setFooter("Price History: (wip - precisa do mongodb)");
+                            embed.setFooter("Price History: \n"+priceHistoryString);
                             msg_createGraph.edit(embed);
                             msg_createGraph.reactions.forEach(react=>react.removeAll());
                         });
@@ -176,5 +195,35 @@ async function createMessage(filter,message,coin_name,image_link,color){
         }).catch(err=>console.log(err));
     }catch(err){
         console.error(err);
+    }
+}
+
+async function getValuesList(client,coin_name){
+    priceHistoryString="";
+    priceHistoryList = await client.getCCValues(coin_name);
+    priceHistoryList.forEach(data_str => {priceHistoryString+=data_str.price+"\n";});
+    return priceHistoryString;
+}
+
+async function buildGraph(client,coin_name,limit=10){
+    try {
+        var old_value_list = await client.getCCValues(coin_name,limit);
+        json_list = JSON.stringify(old_value_list),
+        parsed_list = JSON.parse(json_list);
+        let value_list=Array(parsed_list.length);
+        var cc=parsed_list.length-1;
+        parsed_list.forEach(item=>{
+            try{
+                value_list[cc]=parseFloat(item.price);//.toFixed(2));
+            }catch(err){
+                value_list[cc]=(0);
+            }
+            cc-=1;
+        });
+        //console.log(asciiChart.plot(value_list,{height:10}));
+        return "Valor atual: "+parseFloat(value_list[value_list.length-1]).toFixed(4)+"\n_*GRAFICO*_\n`"+asciiChart.plot(value_list,{height:10})+"`";
+    } catch (error) {
+        console.error("Random error occurred");
+        console.log(error);
     }
 }

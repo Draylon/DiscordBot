@@ -27,5 +27,6 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-    name: 'count'
+    name: 'count',
+    description: 'Game of counting consists of each player typing numbers that are exactly one above the last one.'
 };

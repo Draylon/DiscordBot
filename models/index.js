@@ -1,4 +1,6 @@
 module.exports = {
     Guild: require('./guild'),
-    Profile: require('./profile')
+    Profile: require('./profile'),
+    Cryptocurrency: require('./cryptocurrency'),
+    Cc_value: require('./cc_value')
 };

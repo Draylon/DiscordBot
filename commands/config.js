@@ -1,7 +1,11 @@
 
 exports.run = async (client, message, args, settings) => {
 
-    if (!message.member.hasPermission('ADMINISTRATOR')) return;
+    const adm_role = message.guild.roles.get('699581044621312030');
+    const staff_role = message.guild.roles.get('699581322477174825');
+
+    
+    if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.send(`You must be ${staff_role.toString()} for that`).then(msg=>msg.delete(3000));
 
     let setting = args[0];
     let updated = args.slice(1).join(' ');
@@ -9,10 +13,11 @@ exports.run = async (client, message, args, settings) => {
     switch (setting) {
         case 'shutdown':{
             try{
-                await message.channel.send("│>─ Shutting down ─<│");
+                message.delete();
+                await message.channel.send("│>─ Shutting down ─<│").then(msg => msg.delete(3000));
                 process.exit();
             }catch(err){
-                message.channel.send("Faliure shutting down!!");
+                message.channel.send("Failure shutting down!!");
                 console.error(err);
             }
             break;
@@ -105,6 +110,7 @@ exports.run = async (client, message, args, settings) => {
             break;
         }
         case 'modRole': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete(3000));
             /**
              * Make sure to do role validation? Need help? Refer to the "welcomeChannel" case statement above!
              */
@@ -112,6 +118,7 @@ exports.run = async (client, message, args, settings) => {
             break;
         }
         case 'adminRole': {
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete(3000));
             /**
              * Make sure to do role validation? Need help? Refer to the "welcomeChannel" case statement above!
              */
@@ -133,5 +140,6 @@ exports.run = async (client, message, args, settings) => {
 };
 
 exports.help = {
-    name: 'config'
+    name: 'config',
+    description: 'Options for tweaking the bot'
 };

@@ -20,7 +20,7 @@
   "homepage": "https://github.com/acollierr17/discord.js-series#readme",
   "dependencies": {
     "asciichart": "^1.5.25",
-    "discord.js": "^11.6.4",
+    "discord.js": "^12.4.1",
     "dotenv-flow": "^0.1.0",
     "moment": "^2.29.1",
     "mongoose": "^5.4.14",

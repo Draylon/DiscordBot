@@ -2,13 +2,18 @@ const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const { Cc_value,Cryptocurrency,Guild, Profile } = require('../models');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = client => {
     client.getGuild = async guild => {
         const data = await Guild.findOne({ guildID: guild.id });
         if (data) return data;
         else return client.config.defaultSettings;
+    };
+    client.guildExists = async guildId => {
+        if(await Guild.findOne({guildID:guildId}))
+            return true;
+        return false;
     };
 
     client.updateGuild = async (guild, settings) => {
@@ -40,11 +45,20 @@ module.exports = client => {
         return newProfile.save()
             .then(console.log(`New profile saved for user "${merged.username}" (${merged.userID})`));
     };
-
+    client.profileExists = async userID => {
+        if(await Profile.findOne({userID:userID})){
+            return true;
+        }
+        return false;
+    };
     client.getProfile = async user => {
         const data = await Profile.findOne({ userID: user.id });
-        if (data) return data;
-        else return;
+        if (data){
+             return data;
+        }else{
+            console.log("USER "+user.id+" not added!!");
+            return;
+        }
     };
 
     client.updateProfile = async (user, data) => {
@@ -75,49 +89,89 @@ module.exports = client => {
         let filesList = fs.readdirSync(directoryPath);
 
         filesList.forEach(item => {
-            returnList.push(item.split(".js")[0]);
+            if(item[0] != '_')
+                returnList.push(item.split(".js")[0]);
         });
         return returnList;
     };
 
 
     // ====  WELCOME_INITIALIZER ===
-    client.welcomeInitialize = () => {
-        let embed = new RichEmbed()
-            .setAuthor(welcomeChannel.guild.name,welcomeChannel.guild.iconURL)
+    client.welcomeInitialize = channel => {
+        let embed = new MessageEmbed()
+            .setAuthor(channel.guild.name,channel.guild.iconURL)
             .setColor(0x1f3f52)
-            .setTitle("Welcome to "+welcomeChannel.guild.name)
+            .setTitle("Welcome to "+channel.guild.name)
             .setDescription(">> click ✅ to verify <<")
             .setImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fcrab-dancing-gifs&psig=AOvVaw3CTztTLauDs7AyicxNxUmU&ust=1603677941540000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKCtuYPUzuwCFQAAAAAdAAAAABAg");
 
-        welcomeChannel.send(embed).then(async msg => {
+        channel.send(embed).then(async msg => {
             await msg.react('✅');
         });
     };
-    client.rolesInitialize = () => {
-        const a = rolesChannel.guild.roles.get('711218719652577381'); // UDESC
-        const b = rolesChannel.guild.roles.get('711659664743333949'); // Developer
+    client.rolesInitialize = channel => {
+        const a = channel.guild.roles.cache.get('711218719652577381'); // UDESC
+        const b = channel.guild.roles.cache.get('711659664743333949'); // Developer
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle('Available Roles')
             //🇨 ${c.toString()}
             .setDescription(`
         
-            Roles avaliable in **${rolesChannel.guild.name}**! You may choose from our list of roles you can join/leave from:
+            Roles avaliable in **${channel.guild.name}**! You may choose from our list of roles you can join/leave from:
 
         🇦 ${a.toString()}
         🇧 ${b.toString()}
         
         `)
             .setColor(0xdd9323)
-            .setFooter(`Guild ID: ${rolesChannel.guild.id}`);
+            .setFooter(`Guild ID: ${channel.guild.id}`);
 
-        rolesChannel.send(embed).then(async msg => {
+        channel.send(embed).then(async msg => {
 
             await msg.react('🇦');
             await msg.react('🇧');
             //await msg.react('🇨');
         });
+    };
+
+    // ====  DATABASE ====
+
+    client.updateDatabase = async () => {
+        try{
+            await client.guilds.cache.forEach(guild=>{
+                console.log("Guild: "+guild.name);
+                if(!client.guildExists(guild.id)){
+                    console.log("guild "+guild.name+" is new!");
+                    client.createGuild({
+                        guildID: guild.id,
+                        guildName: guild.name,
+                        ownerID: guild.ownerID,
+                        ownerUsername: guild.owner.user.tag
+                    });
+                }
+                guild.members.fetch({force:true}).then(list => {
+                    
+                    list.forEach(async member=>{
+                        if(!member.user.bot){
+                            const userExists = await client.profileExists(member.user.id);
+                            if(!userExists){
+                                console.log("user "+member.user.tag+" is new!");
+                                client.createProfile({
+                                    guildID: member.guild.id,
+                                    guildName: member.guild.name,
+                                    userID: member.id,
+                                    username: member.user.tag});
+                            }
+                        }
+                    });
+                });
+            });
+            console.log("DB updated!");
+            return true;
+        }catch(e){
+            return false;
+        }
     };
 
     // ====  CRYPTOCURRENCY  =====

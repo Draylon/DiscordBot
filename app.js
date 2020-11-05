@@ -2,7 +2,7 @@ const { Client, Collection} = require('discord.js');
 const fs = require('fs');
 require('dotenv-flow').config();
 
-const client = new Client();
+const client = new Client({fetchAllMembers: true});
 
 require('./utils/functions')(client);
 

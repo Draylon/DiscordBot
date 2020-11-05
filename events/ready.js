@@ -1,25 +1,46 @@
-module.exports = client => {
+
+module.exports = async client => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    const { welcomeChannelName,rolesChannelName } = client.config.defaultSettings;
-    const welcomeChannel = client.channels.find(c => c.name === welcomeChannelName);
-    const rolesChannel = client.channels.find(c => c.name === rolesChannelName);
+    const welcomeChannel = client.channels.cache.get(client.config.defaultSettings.welcomeChannelID);
+    const rolesChannel = client.channels.cache.get(client.config.defaultSettings.rolesChannelID);
+    // update users database
+    
+    await client.updateDatabase();
+
+
     // fetch messages on default channels
 
     //const fetchedMessages = [welcome,roles_];
-    welcomeChannel.fetchMessages({ limit: 1 }).then(collected => {
+    welcomeChannel.messages.fetch({ limit: 1 }).then(collected => {
         if(collected.size <= 0){
-            client.welcomeInitialize();
+            client.welcomeInitialize(welcomeChannel);
+            console.log("Welcome channel initialized!");
         }else{
+            collected.forEach(message=>{
+                message.reactions.cache.forEach(reaction=>{
+                    reaction.users.cache.forEach(user=>{
+                        console.log("User: "+user.tag);
+                    })
+                });
+            });
             // update missing reactions ?
             // update users that reacted while bot offline:?
         }
     });
 
-    rolesChannel.fetchMessages({ limit: 1 }).then(collected => {
+    rolesChannel.messages.fetch({ limit: 1 }).then(collected => {
         if(collected.size <= 0){
-            client.rolesInitialize();
+            client.rolesInitialize(rolesChannel);
+            console.log("Roles channel initialized!");
         }else{
+            collected.forEach(message=>{
+                message.reactions.cache.forEach(reaction=>{
+                    reaction.users.cache.forEach(user=>{
+                        console.log("User: "+user.tag);
+                    })
+                });
+            });
             // update missing reactions ?
             // update users that reacted while bot offline:?
         }

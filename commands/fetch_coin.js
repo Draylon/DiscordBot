@@ -1,18 +1,20 @@
 const fetch = require('node-fetch');
 const asciiChart = require('asciichart');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
-
-    var coin_name = args.join(' '),
+    await message.delete().catch(O_o=>{});
+    if(args.length < 1)
+        return message.channel.send("Too few arguments!");
+    var coin_name = args[0],
     image_link = "",
     color = 0x000;
+
     const filter = (reaction, user) => ['❌','📈','🇦', '🇧', '🇨'].includes(reaction.emoji.name) && user.id === message.author.id;
-    await message.delete().catch(O_o=>{});
     if(coin_name == ''){
         const { prefix } = client.config;
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle('Avalilable Coins')
             .setDescription(`
             
@@ -64,7 +66,7 @@ exports.run = async (client, message, args) => {
                 createMessage(client,filter,message,coin_name,image_link,color);
             }).catch(collected => {
                 msg.delete();
-                return message.channel.send(`No coin selected!`).then(msg => msg.delete(5000));
+                return message.channel.send(`No coin selected!`).then(msg => msg.delete({timeout:5000}));
             });
         });
     }else{
@@ -106,7 +108,7 @@ async function createMessage(client,filter,message,coin_name,image_link,color){
             .then(json => {
                 try {
                     var api_data = JSON.parse(json);
-                    let embed = new RichEmbed()
+                    let embed = new MessageEmbed()
                     .setTitle(api_data.data.id)
                     .setThumbnail(image_link)
                     .setDescription(`
@@ -136,7 +138,7 @@ async function createMessage(client,filter,message,coin_name,image_link,color){
                                         intv_ = setInterval( async ()=>{
                                             intv_count+=1;
                                             if(intv_count>20){
-                                                msg_updateGraph.edit("Timed out").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));clearInterval(intv_);
+                                                msg_updateGraph.edit("Timed out").then(msg_cutUpdate=>msg_cutUpdate.delete({timeout:3000}));clearInterval(intv_);
                                             }
                                             let dataResponse = await fetch('https://api.coincap.io/v2/assets/'+coin_name)
                                             .then(res => res.text())
@@ -149,7 +151,7 @@ async function createMessage(client,filter,message,coin_name,image_link,color){
                                                 }catch(err){
                                                     console.error(error);
                                                     msg.delete();
-                                                    message.channel.send("Error happened").then(msg =>{msg.delete(3000);});
+                                                    message.channel.send("Error happened").then(msg =>{msg.delete({timeout:3000});});
                                                 }
                                             });
                                         },1000*15);
@@ -163,32 +165,32 @@ async function createMessage(client,filter,message,coin_name,image_link,color){
                                             switch (reaction.emoji.name) {
                                                 case '❌':
                                                     clearInterval(intv_);
-                                                    msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));
+                                                    msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete({timeout:3000}));
                                                     break;
                                             }
                                         }).catch(collected => {
                                             clearInterval(intv_);
-                                            msg_createGraph.reactions.forEach(react=>react.removeAll());
-                                            msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete(3000));
+                                            msg_createGraph.reactions.removeAll();
+                                            msg_updateGraph.edit("Closing").then(msg_cutUpdate=>msg_cutUpdate.delete({timeout:3000}));
                                                     
                                         });
                                     });
                                     break;
                                 default:
-                                    msg_createGraph.reactions.forEach(react=>react.removeAll());
+                                    msg_createGraph.reactions.removeAll();
                             }
                         }).catch(collected => {
                             //msg_createGraph.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
                             embed.setFooter("Price History: \n"+priceHistoryString);
                             msg_createGraph.edit(embed);
-                            msg_createGraph.reactions.forEach(react=>react.removeAll());
+                            msg_createGraph.reactions.removeAll();
                         });
                     });
                 } catch (error) {
                     console.error(error);
                     msg.delete();
                     message.channel.send("Error happened").then(msg =>{
-                        msg.delete(3000);
+                        msg.delete({timeout:3000});
                     });
                 }
             }).catch(err=>console.log(err));

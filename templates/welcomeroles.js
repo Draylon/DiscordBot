@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
     const a = message.guild.roles.get('711218719652577381'); // UDESC
     const b = message.guild.roles.get('711659664743333949'); // Developer
 
-    const embed = new RichEmbed()
+    const embed = new MessageEmbed()
         .setTitle('Available Roles')
         //🇨 ${c.toString()}
         .setDescription(`

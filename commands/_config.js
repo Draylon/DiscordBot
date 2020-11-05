@@ -1,11 +1,11 @@
 
 exports.run = async (client, message, args, settings) => {
 
-    const adm_role = message.guild.roles.get('699581044621312030');
-    const staff_role = message.guild.roles.get('699581322477174825');
+    const adm_role = message.guild.roles.cache.get('699581044621312030');
+    const staff_role = message.guild.roles.cache.get('699581322477174825');
 
     
-    if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.send(`You must be ${staff_role.toString()} for that`).then(msg=>msg.delete(3000));
+    if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.send(`You must be ${staff_role.toString()} for that`).then(msg=>msg.delete({timeout:3000}));
 
     let setting = args[0];
     let updated = args.slice(1).join(' ');
@@ -14,7 +14,7 @@ exports.run = async (client, message, args, settings) => {
         case 'shutdown':{
             try{
                 message.delete();
-                await message.channel.send("│>─ Shutting down ─<│").then(msg => msg.delete(3000));
+                await message.channel.send("│>─ Shutting down ─<│").then(msg => msg.delete({timeout:3000}));
                 process.exit();
             }catch(err){
                 message.channel.send("Failure shutting down!!");
@@ -32,13 +32,13 @@ exports.run = async (client, message, args, settings) => {
                         filesList.forEach(cmdName => {
                             delete require.cache[require.resolve(`./${cmdName.toLowerCase()}.js`)];
                         });
-                        client.commands.deleteAll();
+                        client.commands.clear();
                         filesList.forEach(cmdName =>{
                             const pullNewCommand = require(`./${cmdName.toLowerCase()}.js`);
                             client.commands.set(cmdName, pullNewCommand);
                         });
                         message.delete();
-                        message.channel.send("All commands reloaded!").then(msg => msg.delete(3000));
+                        message.channel.send("All commands reloaded!").then(msg => msg.delete({timeout:3000}));
                         console.clear();
                     }catch(err){
                         message.channel.send("Error occurred: "+err);
@@ -55,7 +55,7 @@ exports.run = async (client, message, args, settings) => {
                         return message.channel.send("Error reloading "+updated.toUpperCase()+"!!!");
                     }
                     message.delete();
-                    message.channel.send("Command "+updated.toUpperCase()+" Reloaded!").then(msg => msg.delete(3000));;
+                    message.channel.send("Command "+updated.toUpperCase()+" Reloaded!").then(msg => msg.delete({timeout:3000}));;
                 }
             }
             break;
@@ -110,7 +110,7 @@ exports.run = async (client, message, args, settings) => {
             break;
         }
         case 'modRole': {
-            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete(3000));
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete({timeout:3000}));
             /**
              * Make sure to do role validation? Need help? Refer to the "welcomeChannel" case statement above!
              */
@@ -118,7 +118,7 @@ exports.run = async (client, message, args, settings) => {
             break;
         }
         case 'adminRole': {
-            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete(3000));
+            if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You must be ${adm_role.toString()} for that`).then(msg=>msg.delete({timeout:3000}));
             /**
              * Make sure to do role validation? Need help? Refer to the "welcomeChannel" case statement above!
              */

@@ -46,7 +46,9 @@ module.exports = async (client, message) => {
         var cmdStrings = "";
         client.avaliableCommands().forEach(element => {cmdStrings+=element+"\n";});
         message.delete();
-        return message.channel.send("Command >"+command+"< not found!\n__Avaliable commands__\n\n"+cmdStrings).then(d_msg=>d_msg.delete(25000));
+        return message.channel.send("Command >"+command+"< not found!\n__Avaliable commands__\n\n"+cmdStrings).then(d_msg=>{
+            d_msg.delete({timeout:25000});
+        });
     }
 
     cmd.run(client, message, args, settings);

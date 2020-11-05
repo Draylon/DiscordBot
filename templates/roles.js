@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args) => {
 
@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 
     const filter = (reaction, user) => ['🇦', '🇧', '🇨'].includes(reaction.emoji.name) && user.id === message.author.id;
 
-    const embed = new RichEmbed()
+    const embed = new MessageEmbed()
         .setTitle('Avaiilable Roles')
         .setDescription(`
         
@@ -43,38 +43,38 @@ exports.run = async (client, message, args) => {
             switch (reaction.emoji.name) {
                 case '🇦':
                     if (message.member.roles.has(a.id)) {
-                        msg.delete(2000);
-                        return message.channel.send('You are already in this role!').then(m => m.delete(3000));
+                        msg.delete({timeout:2000});
+                        return message.channel.send('You are already in this role!').then(m => m.delete({timeout:3000}));
                     }
                     message.member.addRole(a).catch(err => {
                         console.log(err);
                         return message.channel.send(`Error adding you to this role: **${err.message}**.`);
                     });
-                    message.channel.send(`You have been added to the **${a.name}** role!`).then(m => m.delete(3000));
+                    message.channel.send(`You have been added to the **${a.name}** role!`).then(m => m.delete({timeout:3000}));
                     msg.delete();
                     break;
                 case '🇧':
                     if (message.member.roles.has(b.id)) {
-                        msg.delete(2000);
-                        return message.channel.send('You are already in this role!').then(m => m.delete(3000));
+                        msg.delete({timeout:2000});
+                        return message.channel.send('You are already in this role!').then(m => m.delete({timeout:3000}));
                     }
                     message.member.addRole(b).catch(err => {
                         console.log(err);
                         return message.channel.send(`Error adding you to this role: **${err.message}**.`);
                     });
-                    message.channel.send(`You have been added to the **${b.name}** role!`).then(m => m.delete(3000));
+                    message.channel.send(`You have been added to the **${b.name}** role!`).then(m => m.delete({timeout:3000}));
                     msg.delete();
                     break;
                 case '🇨':
                     if (message.member.roles.has(c.id)) {
-                        msg.delete(2000);
-                        return message.channel.send('You are already in this role!').then(m => m.delete(3000));
+                        msg.delete({timeout:2000});
+                        return message.channel.send('You are already in this role!').then(m => m.delete({timeout:3000}));
                     }
                     message.member.addRole(c).catch(err => {
                         console.log(err);
                         return message.channel.send(`Error adding you to this role: **${err.message}**.`);
                     });
-                    message.channel.send(`You have been added to the **${c.name}** role!`).then(m => m.delete(3000));
+                    message.channel.send(`You have been added to the **${c.name}** role!`).then(m => m.delete({timeout:3000}));
                     msg.delete();
                     break;
             }

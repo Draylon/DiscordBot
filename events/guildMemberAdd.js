@@ -1,7 +1,5 @@
 module.exports = async (client, member) => {
 
-    const {logsChannelName} = client.config.defaultConfig;
-    let userLogs = member.guild.channels.find(c => c.name === logsChannelName);
     const newProfile = {
         guildID: member.guild.id,
         guildName: member.guild.name,
@@ -15,7 +13,8 @@ module.exports = async (client, member) => {
         console.error(err);
     }
 
-    // anthony#8577
+    /*
+    let userLogs = member.guild.channels.cache.get(client.config.defaultSettings.logsChannelID);
     userLogs.send(`${member.user.tag} has joined **${member.guild}**!`);
-
+    */
 };

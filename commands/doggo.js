@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
 exports.run = async (client, message, args) => {
@@ -8,7 +8,7 @@ exports.run = async (client, message, args) => {
         .then(json => json.message);
 
     // anthony#8577
-    let embed = new RichEmbed()
+    let embed = new MessageEmbed()
         .setAuthor(message.member.user.tag, message.member.user.avatarURL)
         .setColor(0xdd2423)
         .setImage(doggo)

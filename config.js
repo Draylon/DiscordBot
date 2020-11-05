@@ -6,9 +6,10 @@ module.exports = {
     mongoURI: process.env.MONGO_URI,
     defaultSettings: {
         prefix: process.env.PREFIX,
-        welcomeChannelName: '_welcome',
-        rolesChannelName: '_roles',
-        logsChannelName: '_logs',
+        welcomeChannelID: '759222126912864319',
+        rolesChannelID: '769707045489475584',
+        logsChannelID: '769750038049718272',
+        notificationChannelID: '689444720883269873',
         welcomeMsg: 'Welcome {{user}} to {{guild}}!',
         modRole: '_staff',
         adminRole: 'admin'

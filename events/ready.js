@@ -8,6 +8,8 @@ module.exports = async client => {
     
     await client.updateDatabase();
 
+    await client.initReminders();
+
 
     // fetch messages on default channels
 

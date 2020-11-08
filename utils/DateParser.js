@@ -1,7 +1,7 @@
 
 class DateParser{
     constructor(){}
-    static fromText(text){
+    static fromText(text,now){
         var ms = 0;
         /*
         elemnts to remove:
@@ -15,6 +15,7 @@ class DateParser{
         */
         let splitting = text.split(" "),
         spl_ind = 0;
+        //console.log(splitting);
 
         splitting.forEach(item => {
             switch (item) {
@@ -26,38 +27,31 @@ class DateParser{
             spl_ind++;
         });
         spl_ind=0;
-
+        //console.log(splitting);
         let dateType=-1;
         let temp_number = 0;
         let next_p = true;
         splitting.forEach(item => {
             switch (item) {
                 case 'in':
+                case 'em':
                 case 'within':
                     if(dateType==-1)dateType=1;
                 break;
                 // configuring the timer - style
                 case 'at':
                 case '@':
+                case 'when':
+                case 'date':
                     if(dateType==-1)dateType=2;
                 break;
                 // configuring the date style            
                 default:
                     if(dateType == 1){
-                        if(parseInt(item) == 'NaN' || parseInt(item) == NaN){
-                            console.log(item+" is nan");
+                        if(isNaN(parseInt(item))){
                             switch(item){
                                 case 'next':
                                     next_p=true;break;
-                                case 'milliseconds':
-                                case 'millisecond':
-                                case 'millisegundos':
-                                case 'millisegundo':
-                                case 'msecs':
-                                case 'msegs':
-                                case 'ms':
-                                    console.log(temp_number+' ms');
-                                    ms+=temp_number;temp_number=0;break;
                                 case 'seconds':
                                 case 'second':
                                 case 'segundos':
@@ -65,7 +59,7 @@ class DateParser{
                                 case 's':
                                 case 'secs':
                                 case 'segs':
-                                    console.log(temp_number+' secs');
+                                    //console.log(temp_number+' secs');
                                     ms+=temp_number*1000;temp_number=0;break;
                                 case 'minute':
                                 case 'minutes':
@@ -73,14 +67,14 @@ class DateParser{
                                 case 'minuto':
                                 case 'min':
                                 case 'm':
-                                    console.log(temp_number+' min');
+                                    //console.log(temp_number+' min');
                                     ms+=temp_number*1000*60;temp_number=0;break;
                                 case 'hour':
                                 case 'hours':
                                 case 'horas':
                                 case 'h':
                                 case 'hrs':
-                                    console.log(temp_number+' hrs');
+                                    //console.log(temp_number+' hrs');
                                     ms+=temp_number*1000*60*60;temp_number=0;break;
                                 case 'day':
                                 case 'days':
@@ -104,51 +98,34 @@ class DateParser{
                             temp_number=parseInt(item);
                         }
                     }else if(dateType == 2){
-                        let spl_spot = item.split(':');
-                        let hour=0,min=0,seg=0,mss=0,mark='';
-                        if(spl_spot.length > 1){//has 2 elements == h:(minute | mark)
-                            hour=spl_spot[0];
-                            
-                            if(spl_spot[1].toLowerCase() == 'am' || spl_spot[1].toLowerCase() =='pm') mark=spl_spot[1];
-                            else min = spl_spot[1];
+                        item = item.trim();
+                        let today_ = new Date();
+                        
+                        let date_str=[today_.getDate(),today_.getMonth(),today_.getFullYear()],
+                        time_str=[today_.getHours(),today_.getMinutes()+5,today_.getSeconds()],
+                        mark='',spl_spot = item.split(" ");
 
-                            
-                            if(spl_spot.length > 2)//has 3 elements == h:m:(seconds or mark)
-                                if(spl_spot[2].toLowerCase() == 'am' || spl_spot[2].toLowerCase() =='pm') mark=spl_spot[2];
-                                else seg = spl_spot[2];
-                            
-                            if(spl_spot.length > 3)//has 4 elements == h:m:s:ms:mark
-                                if(spl_spot[3].toLowerCase() == 'am' || spl_spot[3].toLowerCase() =='pm') mark=spl_spot[3];
-                                else mss = spl_spot[3];
-
-                            if(mark == 'pm')
-                                ms += ((hour+12)*60*60*1000)+(min*60*60*1000)+(seg*60*1000)+mss;
-                            else
-                                ms += (hour*60*60*1000)+(min*60*60*1000)+(seg*60*1000)+mss;
-                        }else{
-                            spl_spot = item.split('/');
-                            let d=0,m=0,y=0;
-                            if(spl_spot.length > 1){
-                                d=spl_spot[0];
-                                if(spl_spot.length > 2){
-                                    m=spl_spot[1];
-                                    y=spl_spot[2];
-                                }else{
-                                    m=spl_spot[2];
-                                    y=2020;
-                                }
-                                ms+=(d*24*60*60*1000)+(y*365*24*60*60*1000);
-                                if(m==2)
-                                    ms+=(28*24*60*60*1000);
-                                else
-                                    if(m%2==0)
-                                        ms+=(31*24*60*60*1000);
-                                    else
-                                        ms+=(30*24*60*60*1000);
-                            }else{
-                                return -1;
+                        if(spl_spot.length > 0){ // has date
+                            const user_var=spl_spot[0].split("/");
+                            let uc=0;
+                            while(uc < date_str.length && uc < user_var.length){
+                                date_str[uc] = user_var[uc];
+                                uc++;}
+                            if(spl_spot.length > 1){ // has time
+                                const user_var=spl_spot[1].split("/");
+                                let uc=0;
+                                while(uc < time.length && uc < user_var.length){
+                                    time[uc] = user_var[uc];
+                                    uc++;}
+                                if(spl_spot.length > 2) // has set am-pm
+                                    mark=spl_spot[2].toLowerCase();
+                                    if(mark == 'pm')
+                                        time_str[0]+=12;
                             }
                         }
+
+                        
+                        return Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0);
                     }else{
                         return -1;
                     }
@@ -156,6 +133,10 @@ class DateParser{
             }
             spl_ind++;
         });
+        if(dateType == 1)
+            ms+=now;
+        else
+            ms-=now;
         return ms;
     }
 }

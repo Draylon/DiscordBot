@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const { Cc_value,Cryptocurrency,Guild, Profile } = require('../models');
+const { Cc_value,Cryptocurrency,Guild, Profile,Reminder } = require('../models');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = client => {
@@ -40,7 +40,6 @@ module.exports = client => {
 
     client.createProfile = async profile => {
         const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, profile);
-
         const newProfile = await new Profile(merged);
         return newProfile.save()
             .then(console.log(`New profile saved for user "${merged.username}" (${merged.userID})`));
@@ -59,6 +58,15 @@ module.exports = client => {
             console.log("USER "+user.id+" not added!!");
             return;
         }
+    };
+    client.getProfileCount = async()=>{
+        return await Profile.count();
+    };
+    client.getNewestJoinedDate = async ()=>{
+        const data = await Profile.find().sort({joinDate:'desc'}).limit(1);
+        if(data)
+            return data.joinDate;
+        return -1;
     };
 
     client.updateProfile = async (user, data) => {
@@ -110,8 +118,9 @@ module.exports = client => {
         });
     };
     client.rolesInitialize = channel => {
-        const a = channel.guild.roles.cache.get('711218719652577381'); // UDESC
-        const b = channel.guild.roles.cache.get('711659664743333949'); // Developer
+        const a = channel.guild.roles.cache.get('699581322477174825'); // Staff
+        const b = channel.guild.roles.cache.get('711218719652577381'); // UDESC
+        const c = channel.guild.roles.cache.get('711659664743333949'); // Developer
 
         const embed = new MessageEmbed()
             .setTitle('Available Roles')
@@ -122,6 +131,7 @@ module.exports = client => {
 
         🇦 ${a.toString()}
         🇧 ${b.toString()}
+        🇨 ${c.toString()}
         
         `)
             .setColor(0xdd9323)
@@ -131,7 +141,7 @@ module.exports = client => {
 
             await msg.react('🇦');
             await msg.react('🇧');
-            //await msg.react('🇨');
+            await msg.react('🇨');
         });
     };
 
@@ -140,7 +150,6 @@ module.exports = client => {
     client.updateDatabase = async () => {
         try{
             await client.guilds.cache.forEach(guild=>{
-                console.log("Guild: "+guild.name);
                 if(!client.guildExists(guild.id)){
                     console.log("guild "+guild.name+" is new!");
                     client.createGuild({
@@ -150,10 +159,26 @@ module.exports = client => {
                         ownerUsername: guild.owner.user.tag
                     });
                 }
-                guild.members.fetch({force:true}).then(list => {
-                    
+                guild.members.fetch({force:true}).then( async list => {
+                    let newest_in_guild=0,lstc=0;
                     list.forEach(async member=>{
-                        if(!member.user.bot){
+                        if(member.user.bot)
+                            list.splice(lstc,1);
+                        else
+                            if(member.joinedAt.getTime() > newest_in_guild)
+                                newest_in_guild=member.joinedAt.getTime();
+                        lstc++;
+                    });
+            // two methods to check if there is 'new' users
+            // db sizes differ  |  latest guild user join date > latest mongo user join date
+                    let db_changed = false;
+                    if(list.size > client.getProfileCount())
+                        db_changed=true;
+                    else if(newest_in_guild > await client.getNewestJoinedDate()){
+                        db_changed=true;
+                    }
+                    if(db_changed){
+                        list.forEach(async membed=>{
                             const userExists = await client.profileExists(member.user.id);
                             if(!userExists){
                                 console.log("user "+member.user.tag+" is new!");
@@ -161,10 +186,13 @@ module.exports = client => {
                                     guildID: member.guild.id,
                                     guildName: member.guild.name,
                                     userID: member.id,
-                                    username: member.user.tag});
+                                    username: member.user.tag,
+                                    joinDate: Date.now()});
                             }
-                        }
-                    });
+                        });
+                    }else{
+                        console.log("No new users :(");
+                    }
                 });
             });
             console.log("DB updated!");
@@ -217,13 +245,38 @@ module.exports = client => {
 
     // ============================
 
-    client.createReminder = (user,data) => {
+    client.createReminder = async reminder => {
+        const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, reminder);
 
+        const newProfile = await new Reminder(merged);
+        return newProfile.save();
     };
-    client.updateReminder = (user,data) => {
+    client.runReminder = async reminder => {
+        setTimeout(function(){
+            var guild = client.guilds.cache.get(reminder.guildID);
+            var channel = guild.channels.cache.get(reminder.channelID);
+            var embed = new MessageEmbed()
+            .setTitle("Reminder DUE!")
+            .setDescription(`${reminder.users} ${reminder.roles}`)
+            .addField(reminder.topic,'────────────────────────');
+            channel.send({embed:embed,content:`${reminder.users} ${reminder.roles}`,allowedMentions:{users:reminder.users_snowFlake,roles:reminder.roles_snowFlake}});
+            await client.deleteReminder(reminder);
+        },reminder.date - Date.now());
+    };
+    client.deleteReminder = async reminder_id=>{
+        return Reminder.deleteOne({_id:reminder_id});
+    };
+    client.initReminders = async() => {
+        let old_reminders = await Reminder.find({date:{$lte:(Date.now()+5000)}});
+        old_reminders.forEach(async remd=>{
+            await client.runReminder(remd);
+            await client.deleteReminder(remd);
+        });
+        let new_reminders = await Reminder.find({date:{$gte:(Date.now()),$lte:(Date.now()+1000*60*60*12)}}).limit(100);
+        new_reminders.forEach(async remd=>{
+            await client.runReminder(remd);
+            await client.deleteReminder(remd);
+        });
         
-    };
-    client.deleteReminder = (user,mode) => {
-
     };
 };

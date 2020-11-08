@@ -24,7 +24,8 @@
     "dotenv-flow": "^0.1.0",
     "moment": "^2.29.1",
     "mongoose": "^5.4.14",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "random-color": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^5.8.0"

@@ -9,6 +9,7 @@ module.exports = {
         welcomeChannelID: '759222126912864319',
         rolesChannelID: '769707045489475584',
         logsChannelID: '769750038049718272',
+        configsChannelID: '759225223882473483',
         notificationChannelID: '689444720883269873',
         welcomeMsg: 'Welcome {{user}} to {{guild}}!',
         modRole: '_staff',

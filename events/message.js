@@ -59,7 +59,8 @@ async function updateCoins(client, member, amount) {
         guildID: member.guild.id,
         guildName: member.guild.name,
         userID: member.id,
-        username: member.user.tag
+        username: member.user.tag,
+        joinDate: Date.now()
     };
 
     const profile = await client.getProfile(member);

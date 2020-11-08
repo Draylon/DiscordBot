@@ -6,6 +6,7 @@ const profileSchema = mongoose.Schema({
     guildName: String,
     userID: String,
     username: String,
+    joinDate: Number,
     coins: {
         type: Number,
         default: 0

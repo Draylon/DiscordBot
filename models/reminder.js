@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 
 const profileSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    mention: String,
+    users: [String],
+    roles: [String],
+    users_snowFlake:[String],
+    roles_snowFlake:[String],
     date: Number,
-    title: String,
-    text: String,
-    alert_overdue: Boolean
+    topic: String,
+    channelID: String,
+    guildID: String
 });
 
-module.exports = mongoose.model('reminder', profileSchema);
+module.exports = mongoose.model('Reminder', profileSchema);
+

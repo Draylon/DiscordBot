@@ -1,7 +1,16 @@
-module.exports = async (client, messageReaction, user) => {
 
-    const message = messageReaction.message;
-    const reactionChannel = messageReaction.channel;
+
+const {MessageEmbed} = require('discord.js');
+const ProgressBar = require('../utils/Progress');
+const alphabet_reactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬','🇭','🇮','🇯','🇰','🇱','🇲','🇳','🇴','🇵','🇶','🇷','🇸','🇹','🇺','🇻','🇼','🇽','🇾','🇿'];
+const menu_buttons = ['✅','❌'];
+const zeroPad = (num, places) => String(num).padStart(places, '0');
+
+
+module.exports = async (client, reaction, user) => {
+
+    const message = reaction.message;
+    const reactionChannel = reaction.channel;
 
     const member = message.channel.guild.members.cache.get(user.id);
     if (member.user.bot) return;
@@ -13,19 +22,98 @@ module.exports = async (client, messageReaction, user) => {
     const a = message.guild.roles.cache.get('711218719652577381'); // UDESC
     const b = message.guild.roles.cache.get('711659664743333949'); // Developer
 
-    if (['🇦', '🇧', '🇨'].includes(messageReaction.emoji.name) && message.channel.id === rolesChannel.id) {
-        switch (messageReaction.emoji.name) {
-            case '🇦':
-                member.roles.remove(a).catch(console.error);
-                break;
-            case '🇧':
-                member.roles.remove(b).catch(console.error);
-                break;
-            /*case '🇨':
-                member.removeRole(c).catch(console.error);
-                break;*/
-            default:
-                break;
+    if(message.channel.id === rolesChannel.id)
+        if (['🇦', '🇧', '🇨'].includes(reaction.emoji.name)) {
+            switch (reaction.emoji.name) {
+                case '🇦':
+                    member.roles.remove(a).catch(console.error);
+                    break;
+                case '🇧':
+                    member.roles.remove(b).catch(console.error);
+                    break;
+                /*case '🇨':
+                    member.removeRole(c).catch(console.error);
+                    break;*/
+                default:
+                    break;
+            }
         }
-    }
+
+        if(message.author.bot){
+            //check ongoing polls
+            if(message.embeds.length > 0){
+                let embed = message.embeds[0];
+                if(embed.author){
+                    if(embed.author.name == 'ONGOING POLL'){
+                        if(alphabet_reactions.concat(menu_buttons).includes(reaction.emoji.name)){
+                            let cancelled=false;
+                            switch(reaction.emoji.name){
+                                case '✅':
+                                    if(user.id == embed.footer.text){
+                                        message.reactions.removeAll();
+                                        embed.author.name = 'POLL CONCLUDED!';
+                                        const title = embed.title.split(" |>");
+                                        embed.setTitle(title[0]);
+                                        embed.setFooter("");
+                                        embed.setURL("");
+                                        embed.fields.forEach(field=>{
+                                            field.name = field.name + " ended in "+parseInt(field.value.slice(0,3)).toString()+"%";
+                                            field.value = "────────────────────────";
+                                        });
+                                    }else
+                                        reaction.users.remove(user);
+                                break;
+                                case '❌':
+                                    if(user.id == embed.footer.text){
+                                        message.reactions.removeAll();
+                                        embed.author.name = 'POLL CANCELLED!';
+                                        embed.fields=[];
+                                        embed.setTitle("");
+                                        embed.setFooter("");
+                                        embed.setURL("");
+                                        cancelled=true;
+                                    }else
+                                        reaction.users.remove(user);
+                                break;
+                                default:
+                                    const field_index = alphabet_reactions.indexOf(reaction.emoji.name);
+                                
+                                    var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
+                                    if(url_arr.includes(user.id+"p"+field_index))
+                                        url_arr.splice(url_arr.indexOf(user.id+"p"+field_index),1);
+                                    //console.log('http://a'+url_arr.join('-')+'a.com');
+                                    embed.setURL('http://a'+url_arr.join('-')+'a.com');
+                                    //console.log(embed.url);
+                                    
+                                    const nlen = reaction.count-1;
+                                    var voteCount = 1;
+                                    message.reactions.cache.forEach(iter_reaction=>{
+                                        if(alphabet_reactions.includes(iter_reaction.emoji.name))
+                                            voteCount+=iter_reaction.count-1;
+                                    });
+                                    const title = embed.title.split(" |>");
+                                    embed.setTitle(title[0]+" |>  "+(voteCount-1)+" votes  <|");
+                                    let pbar = new ProgressBar(':bar',{
+                                        curr:nlen,
+                                        incomplete:'_',
+                                        complete: ':',
+                                        head: '#',
+                                        width:60,
+                                        total: voteCount
+                                    });
+                                    pbar.render();
+                                    embed.fields[field_index].value = `${zeroPad(pbar.prcnt,3)}%` +" `"+pbar.lastDraw+"`";
+                            }
+                            message.edit(embed).then(msg_d=>{
+                                if(cancelled)
+                                    msg_d.delete({timeout:5000});
+                            });
+                        }else{
+                            reaction.remove();
+                        }
+                    }
+                }
+            }
+    
+        }
 };

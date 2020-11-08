@@ -1,3 +1,4 @@
 module.exports = {
-    DateParser: require('./DateParser')
+    DateParser: require('./DateParser'),
+    ProgressBar: require('./Progress')
 };

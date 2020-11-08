@@ -1,8 +1,11 @@
+// òûûø×ƒááíó»ªº¿®¬½¼¡«»░▒▒▓│┤ÁÂÀ©╣║╗╝¢¥┐└┐┴┬├─┼ãÃ╚╔╩╦╠═╬¤ðÐÐÊËÈıÍÎÏ┘┌┌█▄¦
+// ¨·¹2³²¶¶■ ☺‼☻+,♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨§6,↑ 
 const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const { Cc_value,Cryptocurrency,Guild, Profile,Reminder } = require('../models');
 const { MessageEmbed } = require('discord.js');
+const randomColor = require('random-color');
 
 module.exports = client => {
     client.getGuild = async guild => {
@@ -60,7 +63,7 @@ module.exports = client => {
         }
     };
     client.getProfileCount = async()=>{
-        return await Profile.count();
+        return await Profile.estimatedDocumentCount();
     };
     client.getNewestJoinedDate = async ()=>{
         const data = await Profile.find().sort({joinDate:'desc'}).limit(1);
@@ -110,8 +113,13 @@ module.exports = client => {
             .setAuthor(channel.guild.name,channel.guild.iconURL)
             .setColor(0x1f3f52)
             .setTitle("Welcome to "+channel.guild.name)
-            .setDescription(">> click ✅ to verify <<")
-            .setImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fcrab-dancing-gifs&psig=AOvVaw3CTztTLauDs7AyicxNxUmU&ust=1603677941540000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKCtuYPUzuwCFQAAAAAdAAAAABAg");
+            .setDescription("`"+
+                "╔══════════════════════════════╗\n"+
+                "║                              ║\n"+
+                "╠  >>  click ✅ to verify  <<  ╣\n"+
+                "║                              ║\n"+
+                "╚══════════════════════════════╝`")
+            .setImage("https://media.tenor.com/images/d0c157935d6144d45c48d5a3053ab118/tenor.gif");
 
         channel.send(embed).then(async msg => {
             await msg.react('✅');
@@ -124,6 +132,7 @@ module.exports = client => {
 
         const embed = new MessageEmbed()
             .setTitle('Available Roles')
+            .setColor(0x1f3f52)
             //🇨 ${c.toString()}
             .setDescription(`
         
@@ -163,13 +172,13 @@ module.exports = client => {
                     let newest_in_guild=0,lstc=0;
                     list.forEach(async member=>{
                         if(member.user.bot)
-                            list.splice(lstc,1);
+                            list.delete(member);
                         else
                             if(member.joinedAt.getTime() > newest_in_guild)
                                 newest_in_guild=member.joinedAt.getTime();
                         lstc++;
                     });
-            // two methods to check if there is 'new' users
+            // two methods to check if there is 'new' user
             // db sizes differ  |  latest guild user join date > latest mongo user join date
                     let db_changed = false;
                     if(list.size > client.getProfileCount())
@@ -252,10 +261,11 @@ module.exports = client => {
         return newProfile.save();
     };
     client.runReminder = async reminder => {
-        setTimeout(function(){
+        return setTimeout(async function(){
             var guild = client.guilds.cache.get(reminder.guildID);
             var channel = guild.channels.cache.get(reminder.channelID);
             var embed = new MessageEmbed()
+            .setColor(randomColor().toString())
             .setTitle("Reminder DUE!")
             .setDescription(`${reminder.users} ${reminder.roles}`)
             .addField(reminder.topic,'────────────────────────');
@@ -263,7 +273,13 @@ module.exports = client => {
             await client.deleteReminder(reminder);
         },reminder.date - Date.now());
     };
-    client.deleteReminder = async reminder_id=>{
+    client.deleteReminder = async (reminder_id,timeout=null)=>{
+        if(timeout)
+            try{
+                clearTimeout(timeout);
+            }catch(e){
+                console.log(e);
+            }
         return Reminder.deleteOne({_id:reminder_id});
     };
     client.initReminders = async() => {

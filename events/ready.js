@@ -40,30 +40,11 @@ module.exports = async client => {
                 message.reactions.cache.forEach(reaction=>{
                     reaction.users.cache.forEach(user=>{
                         console.log("User: "+user.tag);
-                    })
+                    });
                 });
             });
             // update missing reactions ?
             // update users that reacted while bot offline:?
         }
     });
-    
-    /*TO-DO
-
-        REFRESH REMINDER COUNTERS
-
-    */
-    
-
-    /*fetchedMessages.forEach(c => {
-        if(c!= null)
-            c.fetchMessages({ limit: 10 }).then(collected => {
-                console.log(`Fetched ${collected.size} messages in ${c.name}.`)
-                if(collected.size == 0){
-                    //create welcome message
-                    
-                }
-            }).catch(console.error);
-            
-    });*/
 };

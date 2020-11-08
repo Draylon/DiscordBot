@@ -15,12 +15,11 @@ exports.run = (client, message, args) => {
     if(poll_items.length > alphabet_reactions.length+1)
         return message.channel.send("Poll Limit is 26!").then(del_msg=>del_msg.delete({timeout:3000}));
     
-    var color = randomColor(),
-    pollFinished=false,
+    let pollFinished=false,
     pollCancelled=false;
 
     const embed = new MessageEmbed()
-    .setColor(color.hexString())
+    .setColor(randomColor().hexString())
     .setAuthor('ONGOING POLL')
     .setFooter(`${message.author.id}`)
     .setURL(`http://aa.com`)

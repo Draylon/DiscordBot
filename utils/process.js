@@ -1,4 +1,4 @@
-module.run = () =>{
+exports.run = () =>{
     process.on('SIGTERM', signal => {
         console.log(`Process ${process.pid} received a SIGTERM signal`)
         process.exit(0);

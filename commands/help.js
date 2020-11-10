@@ -3,7 +3,8 @@ exports.run = (client, message, args) => {
     const specific_command = args.join(' ');
     //message.delete();
     if(specific_command != ''){
-        // search something specific
+        let hlp_prop = require.cache[require.resolve(`./${specific_command}.js`)];
+        console.log(hlp_prop.exports.help);
     }else{
         var cmdStrings="";
         client.avaliableCommands().forEach(element => {cmdStrings+=element+"\n";});

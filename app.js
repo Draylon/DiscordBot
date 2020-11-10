@@ -11,6 +11,9 @@ client.commands = new Collection();
 client.mongoose = require('./utils/mongoose');
 client.config = require('./config');
 
+require('./utils/process.js').run();
+
+
 fs.readdir('./events/', (err, files) => {
   if (err) return console.error;
   files.forEach(file => {

@@ -126,7 +126,7 @@ exports.run = async (client, message, args) => {
             });
         });
     }else{
-        
+        message.channel.send("Cannot remind in the past!!").then(msg_d=>msg_d.delete({timeout:3000}));
     }
 };
 exports.help = {

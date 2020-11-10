@@ -19,8 +19,9 @@ module.exports = async (client, reaction, user) => {
     
     const rolesChannel = message.guild.channels.cache.get(client.config.defaultSettings.rolesChannelID);
 
-    const a = message.guild.roles.cache.get('711218719652577381'); // UDESC
-    const b = message.guild.roles.cache.get('711659664743333949'); // Developer
+    const a = message.guild.roles.cache.get('699581322477174825');//Staff
+    const b = message.guild.roles.cache.get('711218719652577381'); // UDESC
+    const c = message.guild.roles.cache.get('711659664743333949'); // Developer
 
     if(message.channel.id === rolesChannel.id)
         if (['🇦', '🇧', '🇨'].includes(reaction.emoji.name)) {
@@ -31,9 +32,9 @@ module.exports = async (client, reaction, user) => {
                 case '🇧':
                     member.roles.remove(b).catch(console.error);
                     break;
-                /*case '🇨':
+                case '🇨':
                     member.removeRole(c).catch(console.error);
-                    break;*/
+                    break;
                 default:
                     break;
             }

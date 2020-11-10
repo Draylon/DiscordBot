@@ -15,7 +15,7 @@ exports.run = async (client, message, args, settings) => {
             try{
                 message.delete();
                 await message.channel.send("│>─ Shutting down ─<│").then(msg => msg.delete({timeout:3000}));
-                process.exit();
+                process.exit(0);
             }catch(err){
                 message.channel.send("Failure shutting down!!");
                 console.error(err);

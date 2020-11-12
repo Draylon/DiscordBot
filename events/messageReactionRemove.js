@@ -2,7 +2,7 @@
 
 const {MessageEmbed} = require('discord.js');
 const ProgressBar = require('../utils/Progress');
-const alphabet_reactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬','🇭','🇮','🇯','🇰','🇱','🇲','🇳','🇴','🇵','🇶','🇷','🇸','🇹','🇺','🇻','🇼','🇽','🇾','🇿'];
+const alphabet_reactions = {'🇦':0,'🇧':1,'🇨':2,'🇩':3,'🇪':4,'🇫':5,'🇬':6,'🇭':7,'🇮':8,'🇯':9,'🇰':10,'🇱':11,'🇲':12,'🇳':13,'🇴':14,'🇵':15,'🇶':16,'🇷':17,'🇸':18,'🇹':19,'🇺':20,'🇻':21,'🇼':22,'🇽':23,'🇾':24,'🇿':25};
 const menu_buttons = ['✅','❌'];
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
@@ -46,7 +46,7 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
-                        if(alphabet_reactions.concat(menu_buttons).includes(reaction.emoji.name)){
+                        if(Object.keys(alphabet_reactions).concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
                                 case '✅':
@@ -77,7 +77,7 @@ module.exports = async (client, reaction, user) => {
                                         reaction.users.remove(user);
                                 break;
                                 default:
-                                    const field_index = alphabet_reactions.indexOf(reaction.emoji.name);
+                                    const field_index = alphabet_reactions[reaction.emoji.name];
                                 
                                     var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
                                     if(url_arr.includes(user.id+"p"+field_index))
@@ -86,24 +86,30 @@ module.exports = async (client, reaction, user) => {
                                     embed.setURL('http://a'+url_arr.join('-')+'a.com');
                                     //console.log(embed.url);
                                     
-                                    const nlen = reaction.count-1;
-                                    var voteCount = 1;
+                                    var voteCount = 0,
+                                    voteIndividual={};
                                     message.reactions.cache.forEach(iter_reaction=>{
-                                        if(alphabet_reactions.includes(iter_reaction.emoji.name))
+                                        if(alphabet_reactions[iter_reaction.emoji.name] != undefined){
+                                            voteIndividual[iter_reaction.emoji.name]=iter_reaction.count-1;
                                             voteCount+=iter_reaction.count-1;
+                                        }
                                     });
                                     const title = embed.title.split(" |>");
-                                    embed.setTitle(title[0]+" |>  "+(voteCount-1)+" votes  <|");
-                                    let pbar = new ProgressBar(':bar',{
-                                        curr:nlen,
-                                        incomplete:'_',
-                                        complete: ':',
-                                        head: '#',
-                                        width:60,
-                                        total: voteCount
+                                    embed.setTitle(title[0]+" |>  "+voteCount+" votes  <|");
+                                    //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
+                                    Object.entries(voteIndividual).forEach(entry =>{
+                                        const field_ind = alphabet_reactions[entry[0]];
+                                        const pbar = new ProgressBar(':bar',{
+                                            curr:entry[1],
+                                            incomplete:'_',
+                                            complete: ':',
+                                            head: '#',
+                                            width:55,
+                                            total: Math.max(voteCount,1)
+                                        });
+                                        pbar.render();
+                                        embed.fields[field_ind].value = `${zeroPad(pbar.prcnt,3)}%` +" `"+pbar.lastDraw+"`";
                                     });
-                                    pbar.render();
-                                    embed.fields[field_index].value = `${zeroPad(pbar.prcnt,3)}%` +" `"+pbar.lastDraw+"`";
                             }
                             message.edit(embed).then(msg_d=>{
                                 if(cancelled)

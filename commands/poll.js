@@ -13,7 +13,7 @@ exports.run = (client, message, args) => {
     if(poll_items.length < 2)
         return message.channel.send("Missing Parameters!").then(del_msg=>del_msg.delete({timeout:3000}));
     if(poll_items.length > alphabet_reactions.length+1)
-        return message.channel.send("Poll Limit is 26!").then(del_msg=>del_msg.delete({timeout:3000}));
+        return message.channel.send("Poll Limit is 26 Topics!").then(del_msg=>del_msg.delete({timeout:3000}));
     
     let pollFinished=false,
     pollCancelled=false;
@@ -30,7 +30,7 @@ exports.run = (client, message, args) => {
             incomplete:'_',
             complete: ':',
             head: '#',
-            width:60,
+            width:55,
             total: 1
         });
         pbar.render();

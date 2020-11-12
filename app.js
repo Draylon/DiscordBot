@@ -11,7 +11,7 @@ client.commands = new Collection();
 client.mongoose = require('./utils/mongoose');
 client.config = require('./config');
 
-require('./utils/process').run();
+require('./apps/process').run();
 
 
 fs.readdir('./events/', (err, files) => {
@@ -35,6 +35,7 @@ fs.readdir('./commands/', async (err, files) => {
       client.commands.set(cmdName, props);
     });
   });
+
 
 client.mongoose.init();
 client.login();

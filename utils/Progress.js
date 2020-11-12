@@ -39,7 +39,7 @@ module.exports = (options) =>{
   let incomplete, complete, completeLength;
 
 
-  let width = Math.min(width,50);
+  width = Math.min(width,50);
 
   /* TODO: the following assumes the user has one ':bar' token */
   completeLength = Math.round(width * ratio);

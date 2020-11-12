@@ -4,7 +4,6 @@ const ProgressBar = require('../utils/Progress');
 
 exports.run = async( client,message,args) => {
     
-    var qwe = ProgressBar()
     var pbar = ProgressBar({
         curr:args[0],
         incomplete:'_',

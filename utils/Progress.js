@@ -20,6 +20,7 @@
  * @api public
  */
 module.exports = (options) =>{
+  if(!options) return null;
   let curr = options.curr || 0,
   total = options.total;
   let width = options.width || total,

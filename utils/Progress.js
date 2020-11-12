@@ -62,5 +62,5 @@ module.exports = (options) =>{
   if (curr >= total) callback(callback_params);
   
 
-  return {curr:curr,total:total,width:width,callback:callback,callback_params:callback_params,percent:this.prcnt,bar:lastDraw};
+  return {curr:curr,total:total,width:width,callback:callback,callback_params:callback_params,percent:prcnt,bar:lastDraw};
 };

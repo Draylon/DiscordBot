@@ -99,7 +99,7 @@ module.exports = async (client, reaction, user) => {
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
                                     Object.entries(voteIndividual).forEach(entry =>{
                                         const field_ind = alphabet_reactions[entry[0]];
-                                        const pbar = new ProgressBar(':bar',{
+                                        const pbar = ProgressBar({
                                             curr:entry[1],
                                             incomplete:'_',
                                             complete: ':',
@@ -107,9 +107,7 @@ module.exports = async (client, reaction, user) => {
                                             width:55,
                                             total: Math.max(voteCount,1)
                                         });
-                                        pbar.render();
-                                        embed.fields[field_ind].value = `${zeroPad(pbar.prcnt,3)}%` +" `"+pbar.lastDraw+"`";
-                                        pbar.terminate();
+                                        embed.fields[field_ind].value = `${zeroPad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
                                     });
                             }
                             message.edit(embed).then(msg_d=>{

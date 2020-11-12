@@ -26,14 +26,13 @@ exports.run = (client, message, args) => {
     .setTitle(poll_items[0].trim()+" |>  0 votes  <|");
     poll_items.splice(0,1);
     poll_items.forEach(element => {
-        const pbar = new ProgressBar(':bar',{
+        const pbar = ProgressBar({
             incomplete:'_',
             complete: ':',
             head: '#',
             width:55,
             total: 1
         });
-        pbar.render();
         embed.addField(element.trim(),"000% `"+pbar.lastDraw+"`");
         pbar.terminate();
     });

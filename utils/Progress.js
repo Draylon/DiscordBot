@@ -33,6 +33,18 @@ class ProgressBar{
    * @returns {void}
    * @api public
    */
+  stream=undefined;
+  fmt = '';
+  curr = 0;
+  total = 0;
+  width = 1;
+  clear = undefined;
+  chars = {};
+  renderThrottle = 0;
+  callback = undefined;
+  tokens = {};
+  lastDraw = '';
+  
   constructor(fmt, options) {
     this.stream = options.stream || process.stderr;
     if (typeof(options) === 'number') {

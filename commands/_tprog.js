@@ -17,5 +17,5 @@ exports.run = async( client,message,args) => {
 };
 
 exports.help={
-    name="tprog"
+    name:"tprog"
 };

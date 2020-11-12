@@ -12,12 +12,10 @@ exports.run = async( client,message,args) => {
         width:55,
         total: Math.max(args[1],1)
     });
-    pbar.render();
     console.log(pbar.percent+" "+pbar.bar);
     console.log(pbar.curr+" "+pbar.total);
     message.delete();
     message.channel.send("Percent: "+pbar.prcnt+" `"+pbar.lastDraw+"`");
-    pbar.terminate();
 };
 
 exports.help={

@@ -3,8 +3,9 @@ const ProgressBar = require('../utils/Progress');
 
 
 exports.run = async( client,message,args) => {
-    console.log(args);
-    var pbar = new ProgressBar(':bar',{
+    
+    var qwe = ProgressBar()
+    var pbar = ProgressBar({
         curr:args[0],
         incomplete:'_',
         complete: ':',
@@ -13,7 +14,7 @@ exports.run = async( client,message,args) => {
         total: Math.max(args[1],1)
     });
     pbar.render();
-    console.log(pbar.lastDraw+" "+pbar.prcnt);
+    console.log(pbar.percent+" "+pbar.bar);
     console.log(pbar.curr+" "+pbar.total);
     message.delete();
     message.channel.send("Percent: "+pbar.prcnt+" `"+pbar.lastDraw+"`");

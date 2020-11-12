@@ -12,6 +12,7 @@ exports.run = async( client,message,args) => {
         total: Math.max(args[1],1)
     });
     pbar.render();
+    console.log(pbar);
     message.delete();
     message.channel.send("Percent: "+pbar.prcnt+" `"+pbar.lastDraw+"`");
     pbar.terminate();

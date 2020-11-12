@@ -2,7 +2,7 @@
 const ProgressBar = require('../utils/Progress');
 
 
-module.run = async( client,message,args) => {
+exports.run = async( client,message,args) => {
     const pbar = new ProgressBar(':bar',{
         curr:args[0],
         incomplete:'_',
@@ -14,4 +14,8 @@ module.run = async( client,message,args) => {
     pbar.render();
     message.delete();
     message.channel.send("Percent: "+pbar.prcnt+" `"+pbar.lastDraw+"`");
+};
+
+exports.help={
+    name="tprog"
 };

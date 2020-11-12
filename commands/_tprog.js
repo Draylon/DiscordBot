@@ -15,7 +15,7 @@ exports.run = async( client,message,args) => {
     console.log(pbar.percent+" "+pbar.bar);
     console.log(pbar.curr+" "+pbar.total);
     message.delete();
-    message.channel.send("Percent: "+pbar.prcnt+" `"+pbar.lastDraw+"`");
+    message.channel.send("Percent: "+pbar.percent+"\n`"+pbar.bar+"`");
 };
 
 exports.help={

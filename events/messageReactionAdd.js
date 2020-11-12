@@ -144,6 +144,7 @@ module.exports = async (client, reaction, user) => {
                                     });
                                     pbar.render();
                                     embed.fields[field_ind].value = `${zeroPad(pbar.prcnt,3)}%` +" `"+pbar.lastDraw+"`";
+                                    pbar.terminate();
                                 });
                         }
                         message.edit(embed).then(msg_d=>{

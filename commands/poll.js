@@ -34,7 +34,6 @@ exports.run = (client, message, args) => {
             total: 1
         });
         embed.addField(element.trim(),"000% `"+pbar.lastDraw+"`");
-        pbar.terminate();
     });
 
     

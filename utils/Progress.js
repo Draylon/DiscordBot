@@ -194,6 +194,8 @@ class ProgressBar{
       // this.stream.clearLine(1);
       this.lastDraw = str;
     }
+    console.log(this.prcnt);
+    console.log(this.lastDraw);
   };
 
   /**

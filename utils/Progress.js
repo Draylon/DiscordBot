@@ -1,39 +1,38 @@
-module.exports = ProgressBar;
 
-/**
- * Initialize a `ProgressBar` with the given `fmt` string and `options` or
- * `total`.
- *
- * Options:
- *
- *   - `curr` current completed index
- *   - `total` total number of ticks to complete
- *   - `width` the displayed width of the progress bar defaulting to total
- *   - `stream` the output stream defaulting to stderr
- *   - `head` head character defaulting to complete character
- *   - `complete` completion character defaulting to "="
- *   - `incomplete` incomplete character defaulting to "-"
- *   - `renderThrottle` minimum time between updates in milliseconds defaulting to 16
- *   - `callback` optional function to call when the progress bar completes
- *   - `clear` will clear the progress bar upon termination
- *
- * Tokens:
- *
- *   - `:bar` the progress bar itself
- *   - `:current` current tick number
- *   - `:total` total ticks
- *   - `:elapsed` time elapsed in seconds
- *   - `:percent` completion percentage
- *   - `:eta` eta in seconds
- *   - `:rate` rate of ticks per second
- *
- * @function ProgressBar
- * @param {string} fmt the string with the formatting tokens
- * @param {object|number} options the options for the progress bar
- * @returns {void}
- * @api public
- */
 class ProgressBar{
+  /**
+   * Initialize a `ProgressBar` with the given `fmt` string and `options` or
+   * `total`.
+   *
+   * Options:
+   *
+   *   - `curr` current completed index
+   *   - `total` total number of ticks to complete
+   *   - `width` the displayed width of the progress bar defaulting to total
+   *   - `stream` the output stream defaulting to stderr
+   *   - `head` head character defaulting to complete character
+   *   - `complete` completion character defaulting to "="
+   *   - `incomplete` incomplete character defaulting to "-"
+   *   - `renderThrottle` minimum time between updates in milliseconds defaulting to 16
+   *   - `callback` optional function to call when the progress bar completes
+   *   - `clear` will clear the progress bar upon termination
+   *
+   * Tokens:
+   *
+   *   - `:bar` the progress bar itself
+   *   - `:current` current tick number
+   *   - `:total` total ticks
+   *   - `:elapsed` time elapsed in seconds
+   *   - `:percent` completion percentage
+   *   - `:eta` eta in seconds
+   *   - `:rate` rate of ticks per second
+   *
+   * @function ProgressBar
+   * @param {string} fmt the string with the formatting tokens
+   * @param {object|number} options the options for the progress bar
+   * @returns {void}
+   * @api public
+   */
   constructor(fmt, options) {
     this.stream = options.stream || process.stderr;
     if (typeof(options) === 'number') {
@@ -245,3 +244,4 @@ class ProgressBar{
 
 }
 
+module.exports = ProgressBar;

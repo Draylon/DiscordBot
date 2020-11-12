@@ -2,7 +2,7 @@
 const ProgressBar = require('../utils/Progress');
 
 
-module.exports = async( client,message,args) => {
+module.run = async( client,message,args) => {
     const pbar = new ProgressBar(':bar',{
         curr:args[0],
         incomplete:'_',

@@ -169,7 +169,7 @@ module.exports = (text,now) => {
                             }
                         }
                     }
-                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0))-sv_delay;
+                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0))-sv_delay-(now-today_.getTime());
                     console.log(today_);
                     return ms;
                 }else{

@@ -93,7 +93,7 @@ exports.run = async (client, message, args) => {
             .setTitle("Reminder Created!")
             .setDescription(`${descText}`)
             .setColor(randomColor().hexString())
-            .addField("Date",`${zeroPad(d.getDate(),2)}/${zeroPad(d.getMonth()+1,2)}/${d.getFullYear()} at ${zeroPad(dHour,2)}:${zeroPad(d.getMinutes(),2)}:${zeroPad(d.getSeconds(),2)} ${am}`)
+            .addField("Date",`${zeroPad(d.getUTCDate(),2)}/${zeroPad(d.getUTCMonth()+1,2)}/${d.getUTCFullYear()} at ${zeroPad(dHour,2)}:${zeroPad(d.getUTCMinutes(),2)}:${zeroPad(d.getUTCSeconds(),2)} ${am}`)
             .addField("Remind: ",topic)
             .setFooter(`${createdReminder._id}`);
         message.channel.send(embed).then(async msg_react=>{

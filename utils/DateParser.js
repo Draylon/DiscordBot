@@ -169,6 +169,8 @@ module.exports = (text,now) => {
                             }
                         }
                     }
+                    
+                    console.log((date_str[2]+" "+date_str[1]+" "+date_str[0]+" "+time_str[0]+" "+time_str[1]+" "+time_str[2]));
                     ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0))-sv_delay-(now-today_.getTime());
                     console.log(today_);
                     return ms;

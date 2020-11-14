@@ -102,7 +102,6 @@ module.exports = (text,now) => {
                     item = splitting.join(" ").trim();
                     let today_ = new Date();
                     let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
-                    let utc_min=2;
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
                     time_str=[today_.getUTCHours(),today_.getUTCMinutes()+5,today_.getUTCSeconds()],
                     mark='',spl_spot = item.split(" ");
@@ -121,7 +120,6 @@ module.exports = (text,now) => {
                                 while(uc < time.length && uc < user_var.length){
                                     time_str[uc] = parseInt(user_var[uc]);
                                     if(uc==0) time_str[uc]+=utc_hours;
-                                    if(uc==1) time_str[uc]+=utc_min;
                                     uc++;}
                                 if(spl_spot.length > 2) // has set am-pm
                                     mark=spl_spot[2].toLowerCase();
@@ -134,7 +132,6 @@ module.exports = (text,now) => {
                             while(uc < time_str.length && uc < user_var.length){
                                 time_str[uc] = parseInt(user_var[uc]);
                                 if(uc==0) time_str[uc]+=utc_hours;
-                                if(uc==1) time_str[uc]+=utc_min;
                                 uc++;}
                             if(spl_spot.length > 1){ // has date
                                 user_var=spl_spot[1].split("/");
@@ -164,7 +161,6 @@ module.exports = (text,now) => {
                             }
                         }
                     }
-                    console.log()
                     ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
                     return ms;
                 }else{

@@ -68,8 +68,8 @@ exports.run = async (client, message, args) => {
             guildID:message.guild.id
         });
         let timeout = client.runReminder(createdReminder);
-        let d=new Date(ms);
-        let am='am',dHour=d.getHours();
+        let d=new Date(ms-(3*3600000));
+        let am='am',dHour=d.getUTCHours();
         if(dHour >= 12)
             am='pm';
             if(dHour > 12)

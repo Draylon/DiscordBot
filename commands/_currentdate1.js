@@ -6,11 +6,13 @@ exports.run = async( client,message,args) => {
     
     message.delete();
     let date1=new Date(),
-    date2=new Date(Date.now());
-    let server_delay = (server,utc) => {
-        return (utc.getTime()-server.getTime());
+    server_delay = (date) => {
+        return ((date1.getUTCHours()-date1.getHours())+
+        (date1.getUTCMinutes()-date1.getMinutes())+
+        (date1.getUTCSeconds()-date1.getSeconds())+
+        (date1.getUTCMilliseconds()-date1.getMilliseconds()))
     }
-    message.channel.send(date1+"\n"+date2+" "+server_delay(date1,date2));
+    message.channel.send(date1+"\n"+server_delay(date1,date2));
     
 };
 

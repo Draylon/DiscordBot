@@ -12,7 +12,7 @@ exports.run = async( client,message,args) => {
         (date1.getUTCSeconds()-date1.getSeconds())+
         (date1.getUTCMilliseconds()-date1.getMilliseconds()))
     }
-    message.channel.send(date1+"\n"+server_delay(date1,date2));
+    message.channel.send(date1+"\n"+server_delay(date1));
     
 };
 

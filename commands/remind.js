@@ -116,7 +116,7 @@ exports.run = async (client, message, args) => {
                     embed.setFooter("");
                     embed.setDescription("");
                 }
-                msg_react.edit(embed).then(msg_d2=>msg_d2.delete({timeout:4000}));
+                msg_react.edit(embed).then(msg_d2=>msg_d2.delete({timeout:4000}).catch(e=>console.log));
             }).catch(collected=>{
                 try{
                     msg_react.reactions.removeAll();

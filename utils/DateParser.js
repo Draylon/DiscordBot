@@ -101,7 +101,7 @@ module.exports = (text,now) => {
                     splitting.splice(spl_ind-1,1);
                     item = splitting.join(" ").trim();
                     let today_ = new Date();
-                    let utc_hours = today_.getUTCHours() - today_.getHours();
+                    let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getDate(),today_.getUTCMonth(),today_.getFullYear()],
                     time_str=[today_.getHours(),today_.getMinutes()+5,today_.getSeconds()],
                     mark='',spl_spot = item.split(" ");

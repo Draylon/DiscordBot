@@ -1,4 +1,11 @@
 
+const server_delay = (date) => {
+    return (1000*60*60*(date.getUTCHours()-date.getHours())+
+    1000*60*(date.getUTCMinutes()-date.getMinutes())+
+    1000*(date.getUTCSeconds()-date.getSeconds())+
+    (date.getUTCMilliseconds()-date.getMilliseconds()))
+};
+
 module.exports = (text,now) => {
     var ms = 0;
     /*
@@ -101,6 +108,7 @@ module.exports = (text,now) => {
                     splitting.splice(spl_ind-1,1);
                     item = splitting.join(" ").trim();
                     let today_ = new Date();
+                    let sv_delay=server_delay(today_);
                     let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
                     time_str=[today_.getUTCHours(),today_.getUTCMinutes()+5,today_.getUTCSeconds()],
@@ -161,7 +169,7 @@ module.exports = (text,now) => {
                             }
                         }
                     }
-                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
+                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0))-sv_delay;
                     console.log(today_);
                     return ms;
                 }else{

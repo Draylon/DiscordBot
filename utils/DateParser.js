@@ -8,6 +8,7 @@ const server_delay = (date) => {
 
 module.exports = (text,now) => {
     var ms = 0;
+    let done=false;
     /*
     elemnts to remove:
     and &
@@ -54,7 +55,7 @@ module.exports = (text,now) => {
             break;
             // configuring the date style            
             default:
-                if(dateType == 1){
+                if(dateType == 1 && !done){
                     if(isNaN(parseInt(item))){
                         switch(item){
                             case 'next':
@@ -104,7 +105,7 @@ module.exports = (text,now) => {
                     }else{
                         temp_number=parseInt(item);
                     }
-                }else if(dateType == 2){
+                }else if(dateType == 2 && !done){
                     splitting.splice(spl_ind-1,1);
                     item = splitting.join(" ").trim();
                     let today_ = new Date(now);
@@ -113,7 +114,7 @@ module.exports = (text,now) => {
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
                     time_str=[today_.getUTCHours(),today_.getUTCMinutes(),today_.getUTCSeconds()],
                     mark='',spl_spot = item.split(" ");
-                    if(spl_spot.length > 0 && item.length > 0){
+                    if(spl_spot.length > 0 && item.length > 0 && !done){
                         const user_var_date=spl_spot[0].split("/");
                         const user_var_time=spl_spot[0].split(":");
                         if(user_var_date.length > 1){
@@ -172,7 +173,7 @@ module.exports = (text,now) => {
                     console.log(date_str);
                     console.log(time_str);
                     ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
-                    return ms;
+                    done=true;
                 }else{
                     return -1;
                 }

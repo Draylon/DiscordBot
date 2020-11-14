@@ -112,7 +112,7 @@ module.exports = (text,now) => {
                     let sv_delay=server_delay(today_);
                     let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
-                    time_str=[today_.getUTCHours(),today_.getUTCMinutes(),today_.getUTCSeconds()],
+                    time_str=[today_.getUTCHours(),today_.getUTCMinutes()+5,today_.getUTCSeconds()],
                     mark='',spl_spot = item.split(" ");
                     if(spl_spot.length > 0 && item.length > 0 && !done){
                         const user_var_date=spl_spot[0].split("/");
@@ -170,8 +170,6 @@ module.exports = (text,now) => {
                             }
                         }
                     }
-                    console.log(date_str);
-                    console.log(time_str);
                     ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
                     done=true;
                 }else{

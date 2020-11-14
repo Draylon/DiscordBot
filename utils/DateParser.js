@@ -133,14 +133,29 @@ module.exports = (text,now) => {
                                 uc++;}
                             if(spl_spot.length > 1){ // has date
                                 user_var=spl_spot[1].split("/");
-                                uc=0;
-                                while(uc < date_str.length && uc < user_var.length){
-                                    date_str[uc] = parseInt(user_var[uc]);
-                                    uc++;}
-                                if(spl_spot.length > 2) // has set am-pm
-                                    mark=spl_spot[2].toLowerCase();
+                                if(user_var.length > 1){
+                                    uc=0;
+                                    while(uc < date_str.length && uc < user_var.length){
+                                        date_str[uc] = parseInt(user_var[uc]);
+                                        uc++;}
+                                    if(spl_spot.length > 2) // has set am-pm
+                                        mark=spl_spot[2].toLowerCase();
+                                        if(mark == 'pm' && time_str[0] < 12)
+                                            time_str[0]+=12;
+                                }else{
+                                    mark=spl_spot[1].toLowerCase();
                                     if(mark == 'pm' && time_str[0] < 12)
                                         time_str[0]+=12;
+                                    if(spl_spot.length > 2){
+                                        user_var=spl_spot[2].split("/");
+                                        if(user_var.length > 1){
+                                            uc=0;
+                                            while(uc < date_str.length && uc < user_var.length){
+                                                date_str[uc] = parseInt(user_var[uc]);
+                                                uc++;}
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

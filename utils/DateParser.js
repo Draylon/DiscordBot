@@ -103,7 +103,7 @@ module.exports = (text,now) => {
                     let today_ = new Date();
                     let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getDate(),today_.getUTCMonth(),today_.getFullYear()],
-                    time_str=[today_.getHours(),today_.getMinutes()+5,today_.getSeconds()],
+                    time_str=[today_.getHours()+utc_hours,today_.getMinutes()+5,today_.getSeconds()],
                     mark='',spl_spot = item.split(" ");
                     if(spl_spot.length > 0 && item.length > 0){
                         const user_var_date=spl_spot[0].split("/");
@@ -119,6 +119,7 @@ module.exports = (text,now) => {
                                 uc=0;
                                 while(uc < time.length && uc < user_var.length){
                                     time_str[uc] = parseInt(user_var[uc]);
+                                    if(uc==0) time_str[uc]+=utc_hours;
                                     uc++;}
                                 if(spl_spot.length > 2) // has set am-pm
                                     mark=spl_spot[2].toLowerCase();
@@ -130,6 +131,7 @@ module.exports = (text,now) => {
                             let uc=0;
                             while(uc < time_str.length && uc < user_var.length){
                                 time_str[uc] = parseInt(user_var[uc]);
+                                if(uc==0) time_str[uc]+=utc_hours;
                                 uc++;}
                             if(spl_spot.length > 1){ // has date
                                 user_var=spl_spot[1].split("/");

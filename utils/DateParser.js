@@ -106,21 +106,42 @@ class DateParser{
                         mark='',spl_spot = item.split(" ");
 
                         if(spl_spot.length > 0){ // has date
-                            const user_var=spl_spot[0].split("/");
-                            let uc=0;
-                            while(uc < date_str.length && uc < user_var.length){
-                                date_str[uc] = user_var[uc];
-                                uc++;}
-                            if(spl_spot.length > 1){ // has time
-                                const user_var=spl_spot[1].split("/");
+                            const user_var_date=spl_spot[0].split("/");
+                            const user_var_time=spl_spot[0].split(":");
+                            if(user_var_date.length > 1){
+                                const user_var = user_var_date;
                                 let uc=0;
-                                while(uc < time.length && uc < user_var.length){
-                                    time[uc] = user_var[uc];
+                                while(uc < date_str.length && uc < user_var.length){
+                                    date_str[uc] = user_var[uc];
                                     uc++;}
-                                if(spl_spot.length > 2) // has set am-pm
-                                    mark=spl_spot[2].toLowerCase();
-                                    if(mark == 'pm')
-                                        time_str[0]+=12;
+                                if(spl_spot.length > 1){ // has time
+                                    user_var=spl_spot[1].split("/");
+                                    let uc=0;
+                                    while(uc < time.length && uc < user_var.length){
+                                        time[uc] = user_var[uc];
+                                        uc++;}
+                                    if(spl_spot.length > 2) // has set am-pm
+                                        mark=spl_spot[2].toLowerCase();
+                                        if(mark == 'pm')
+                                            time_str[0]+=12;
+                                }
+                            }else if(user_var_time.length > 1){
+                                const user_var = user_var_time;
+                                let uc=0;
+                                while(uc < date_str.length && uc < user_var.length){
+                                    date_str[uc] = user_var[uc];
+                                    uc++;}
+                                if(spl_spot.length > 1){ // has time
+                                    user_var=spl_spot[1].split("/");
+                                    let uc=0;
+                                    while(uc < time.length && uc < user_var.length){
+                                        time[uc] = user_var[uc];
+                                        uc++;}
+                                    if(spl_spot.length > 2) // has set am-pm
+                                        mark=spl_spot[2].toLowerCase();
+                                        if(mark == 'pm')
+                                            time_str[0]+=12;
+                                }
                             }
                         }
 

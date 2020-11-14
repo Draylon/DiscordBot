@@ -107,7 +107,7 @@ module.exports = (text,now) => {
                 }else if(dateType == 2){
                     splitting.splice(spl_ind-1,1);
                     item = splitting.join(" ").trim();
-                    let today_ = new Date();
+                    let today_ = new Date(now);
                     let sv_delay=server_delay(today_);
                     let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
@@ -169,10 +169,7 @@ module.exports = (text,now) => {
                             }
                         }
                     }
-                    
-                    console.log((date_str[2]+" "+date_str[1]+" "+date_str[0]+" "+time_str[0]+" "+time_str[1]+" "+time_str[2]));
-                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0))-sv_delay-(now-today_.getTime());
-                    console.log(today_);
+                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
                     return ms;
                 }else{
                     return -1;

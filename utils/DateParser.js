@@ -162,7 +162,7 @@ module.exports = (text,now) => {
                         }
                     }
 
-                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0]+utc_hours,time_str[1],time_str[2],0));
+                    ms = (Date.UTC(date_str[2],date_str[1],date_str[0],time_str[0],time_str[1],time_str[2],0));
                     return ms;
                 }else{
                     return -1;

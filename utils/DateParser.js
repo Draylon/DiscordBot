@@ -109,7 +109,7 @@ module.exports = (text,now) => {
                         const user_var_date=spl_spot[0].split("/");
                         const user_var_time=spl_spot[0].split(":");
                         if(user_var_date.length > 1){
-                            const user_var = user_var_date;
+                            var user_var = user_var_date;
                             let uc=0;
                             while(uc < date_str.length && uc < user_var.length){
                                 date_str[uc] = parseInt(user_var[uc]);
@@ -126,7 +126,7 @@ module.exports = (text,now) => {
                                         time_str[0]+=12;
                             }
                         }else if(user_var_time.length > 1){
-                            const user_var = user_var_time;
+                            var user_var = user_var_time;
                             let uc=0;
                             while(uc < time_str.length && uc < user_var.length){
                                 time_str[uc] = parseInt(user_var[uc]);

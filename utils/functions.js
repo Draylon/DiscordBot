@@ -270,7 +270,7 @@ module.exports = client => {
             .setDescription(`${reminder.users} ${reminder.roles}`)
             .addField(reminder.topic,'────────────────────────');
             channel.send({embed:embed,content:`${reminder.users} ${reminder.roles}`,allowedMentions:{users:reminder.users_snowFlake,roles:reminder.roles_snowFlake}});
-            await client.deleteReminder(reminder);
+            await client.deleteReminder(reminder._id);
         },reminder.date - Date.now());
     };
     client.deleteReminder = async (reminder_id,timeout=null)=>{
@@ -286,12 +286,11 @@ module.exports = client => {
         let old_reminders = await Reminder.find({date:{$lte:(Date.now()+5000)}});
         old_reminders.forEach(async remd=>{
             await client.runReminder(remd);
-            await client.deleteReminder(remd);
+            await client.deleteReminder(remd._id);
         });
         let new_reminders = await Reminder.find({date:{$gte:(Date.now()),$lte:(Date.now()+1000*60*60*12)}}).limit(100);
         new_reminders.forEach(async remd=>{
             await client.runReminder(remd);
-            await client.deleteReminder(remd);
         });
         
     };

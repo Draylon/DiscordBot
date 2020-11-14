@@ -55,8 +55,8 @@ exports.run = async (client, message, args) => {
     
     const cancelling_filter = (reaction, user) => ['❌'].includes(reaction.emoji.name) && user.id === message.author.id;
     
-    let ms = DateParser.fromText(date,Date.now());
-    if(ms > 0){
+    let ms = await DateParser(date,Date.now()) || -1;
+    if((ms-Date.now()) > 0){
         let createdReminder = await client.createReminder({
             users:user_mention_list,
             roles:role_mention_list,
@@ -70,9 +70,10 @@ exports.run = async (client, message, args) => {
         let timeout = client.runReminder(createdReminder);
         let d=new Date(ms);
         let am='am',dHour=d.getHours();
-        if(dHour > 12)
+        if(dHour >= 12)
             am='pm';
-            dHour-=12;
+            if(dHour > 12)
+                dHour-=12;
         
         let descText = "Reminder for ";
         user_list.forEach(ul_item=>{
@@ -92,7 +93,7 @@ exports.run = async (client, message, args) => {
             .setTitle("Reminder Created!")
             .setDescription(`${descText}`)
             .setColor(randomColor().hexString())
-            .addField("Date",`${zeroPad(d.getDate(),2)}/${zeroPad(d.getMonth(),2)}/${d.getFullYear()} at ${zeroPad(dHour,2)}:${zeroPad(d.getMinutes(),2)}:${zeroPad(d.getSeconds(),2)} ${am}`)
+            .addField("Date",`${zeroPad(d.getDate(),2)}/${zeroPad(d.getMonth()+1,2)}/${d.getFullYear()} at ${zeroPad(dHour,2)}:${zeroPad(d.getMinutes(),2)}:${zeroPad(d.getSeconds(),2)} ${am}`)
             .addField("Remind: ",topic)
             .setFooter(`${createdReminder._id}`);
         message.channel.send(embed).then(async msg_react=>{

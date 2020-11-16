@@ -135,7 +135,7 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
-                        if(Object.keys(alphabet_reactions).concat(menu_buttons).includes(reaction.emoji.name)){
+                        if(alphabet_array.concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
                                 case '✅':
@@ -187,20 +187,22 @@ module.exports = async (client, reaction, user) => {
                                     embed.setURL('http://a'+url_names.join('-')+'a.com');
                                     //console.log(embed.url);
                                     var voteCount = 0,
-                                    voteIndividual={};
+                                    voteIndKey=[],
+                                    voteIndValue=[];
                                     message.reactions.cache.forEach(iter_reaction=>{
                                         if(alphabet_reactions[iter_reaction.emoji.name] != undefined){
-                                            voteIndividual[iter_reaction.emoji.name]=iter_reaction.count-1;
+                                            voteIndKey.push(iter_reaction.emoji.name);
+                                            voteIndValue.push(iter_reaction.count-1);
                                             voteCount+=iter_reaction.count-1;
                                         }
                                     });
                                     const title = embed.title.split(" |>");
                                     embed.setTitle(title[0]+" |>  "+voteCount+" votes  <|");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
-                                    Object.entries(voteIndividual).forEach(entry =>{
-                                        const field_ind = alphabet_reactions[entry[0]];
+                                    for(var ind_entry=0;ind_entry < voteIndKey.length;ind_entry++){
+                                        const field_ind = alphabet_reactions[voteIndKey[ind_entry]];
                                         const pbar = ProgressBar({
-                                            curr:entry[1],
+                                            curr:voteIndValue[ind_entry],
                                             incomplete:'_',
                                             complete: ':',
                                             head: '#',
@@ -208,7 +210,7 @@ module.exports = async (client, reaction, user) => {
                                             total: Math.max(voteCount,1)
                                         });
                                         embed.fields[field_ind].value = `${zeroPad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
-                                    });
+                                    }
                             }
                             message.edit(embed).then(msg_d=>{
                                 if(cancelled)

@@ -6,7 +6,9 @@ const server_delay = (date) => {
     (date.getUTCMilliseconds()-date.getMilliseconds()))
 };
 
-module.exports = (text,now) => {
+module.exports = (text,now,utc_delay) => {
+    if(!utc_delay)
+        utc_delay=-3;
     var ms = 0;
     let done=false;
     /*
@@ -110,7 +112,6 @@ module.exports = (text,now) => {
                     item = splitting.join(" ").trim();
                     let today_ = new Date(now);
                     let sv_delay=server_delay(today_);
-                    let utc_hours = 3; // today_.getUTCHours() - today_.getHours();
                     let date_str=[today_.getUTCDate(),today_.getUTCMonth(),today_.getUTCFullYear()],
                     time_str=[today_.getUTCHours(),today_.getUTCMinutes()+5,today_.getUTCSeconds()],
                     mark='',spl_spot = item.split(" ");
@@ -128,7 +129,7 @@ module.exports = (text,now) => {
                                 uc=0;
                                 while(uc < time.length && uc < user_var.length){
                                     time_str[uc] = parseInt(user_var[uc]);
-                                    if(uc==0) time_str[uc]+=utc_hours;
+                                    if(uc==0) time_str[uc]-=utc_delay;
                                     uc++;}
                                 if(spl_spot.length > 2) // has set am-pm
                                     mark=spl_spot[2].toLowerCase();
@@ -140,7 +141,7 @@ module.exports = (text,now) => {
                             let uc=0;
                             while(uc < time_str.length && uc < user_var.length){
                                 time_str[uc] = parseInt(user_var[uc]);
-                                if(uc==0) time_str[uc]+=utc_hours;
+                                if(uc==0) time_str[uc]-=utc_delay;
                                 uc++;}
                             if(spl_spot.length > 1){ // has date
                                 user_var=spl_spot[1].split("/");

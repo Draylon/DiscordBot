@@ -55,7 +55,9 @@ exports.run = async (client, message, args) => {
     
     const cancelling_filter = (reaction, user) => ['❌'].includes(reaction.emoji.name) && user.id === message.author.id;
     
-    let ms = DateParser(date,Date.now());
+    const utc_delay = await client.getProfile(message.author).tz_offset;
+
+    let ms = DateParser(date,Date.now(),utc_delay);
     if((ms-Date.now()) > 0){
         let createdReminder = await client.createReminder({
             users:user_mention_list,

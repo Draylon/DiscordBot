@@ -75,11 +75,13 @@ module.exports = async (client, reaction, user) => {
                     zone_index=0;
                     zone_list.forEach(delay => {
                         const d = new Date(Date.now() + delay*3600000);
-                        let am_pm = 'am';
-                        if(d.getUTCHours() >= 12)
+                        let am_pm = 'am',
+                        hour_p=d.getUTCHours();
+                        if(hour_p >= 12){
                             am_pm='pm';
+                            if(hour_p > 12)hour_p-=12;}
 
-                        date_text+= alphabet_array[zone_index] + "   "+spacePad(d.getUTCHours(),2)+" : "+spacePad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
+                        date_text+= alphabet_array[zone_index] + "   "+spacePad(hour_p,2)+" : "+spacePad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
                         zone_index++;
                     });
 

@@ -6,7 +6,7 @@ module.exports = {
     "antarctica":[-2,5],
     "europe":[11,10,9,8,7,6,5,3,2,1,0],
     "oceania":[14,13.75,13,12,11.5,11,10.5,10,9.5,9,8,7,-8,-10,-11],
-    "south_america":[-2,-3,-4,-4,5,-5,-6]
+    "south_america":[-2,-3,-4,-4.5,-5,-6]
   },
   "timezones_by_letter":{
     "🇦":"north_america",

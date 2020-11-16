@@ -77,7 +77,8 @@ module.exports = async (client, reaction, user) => {
                     zone_index=0;
                     zone_list.forEach(delay => {
                         const d = new Date(Date.now() - delay*3600000);
-                        date_text+= alphabet_array[zone_index] + "  "+d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()+" . "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"\n";
+                        date_text+= alphabet_array[zone_index] + "   "+d.getHours()+" : "+d.getMinutes()+" : "+d.getSeconds()+"\n";
+                        zone_index++;
                     });
 
                     const filter = (reaction) => alphabet_array.slice(0,7).includes(reaction.emoji.name);

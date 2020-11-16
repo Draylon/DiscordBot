@@ -3,6 +3,7 @@
 const {MessageEmbed} = require('discord.js');
 const ProgressBar = require('../utils/Progress');
 const alphabet_reactions = require('../utils/alphabet_object');
+const alphabet_array = require("../utils/alphabet_array");
 const menu_buttons = ['✅','❌'];
 const {spacePad} = require('../utils/paddings');
 
@@ -46,7 +47,8 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
-                        if(Object.keys(alphabet_reactions).concat(menu_buttons).includes(reaction.emoji.name)){
+                        console.log(user+" removed reaction!");
+                        if(alphabet_array.concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
                                 case '✅':

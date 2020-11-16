@@ -93,7 +93,7 @@ module.exports = async (client, reaction, user) => {
                                             voteCount+=iter_reaction.count-1;
                                         }
                                     });
-                                    const title = embed.title.split(" |>");
+                                    const title = embed.title.split(" |");
                                     embed.setTitle(title[0]+" |>  "+voteCount+" votes  <|");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
                                     Object.entries(voteIndividual).forEach(entry =>{
@@ -106,7 +106,7 @@ module.exports = async (client, reaction, user) => {
                                             width:55,
                                             total: Math.max(voteCount,1)
                                         });
-                                        embed.fields[field_ind].value = `${spacePad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
+                                        embed.fields[field_ind].value = "`"+`${spacePad(pbar.percent,3)}%` +" "+pbar.bar+"`";
                                     });
                             }
                             message.edit(embed).then(msg_d=>{

@@ -32,7 +32,7 @@ exports.run = (client, message, args) => {
             width:55,
             total: 1
         });
-        embed.addField(element.trim(),"000% `"+pbar.bar+"`");
+        embed.addField(element.trim(),"`  0% "+pbar.bar+"`");
     });
 
     

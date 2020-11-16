@@ -5,7 +5,7 @@ const alphabet_reactions = require('../utils/alphabet_object');
 const alphabet_array = require('../utils/alphabet_array');
 const {timezones_by_list,timezones_by_letter} = require('../utils/timezones')
 const menu_buttons = ['✅','❌'];
-const zeroPad = (num, places) => String(num).padStart(places, '0');
+const zeroPad = require('../utils/zeropad');
 
 
 module.exports = async (client, reaction, user) => {
@@ -76,8 +76,12 @@ module.exports = async (client, reaction, user) => {
                     date_text="",
                     zone_index=0;
                     zone_list.forEach(delay => {
-                        const d = new Date(Date.now() - delay*3600000);
-                        date_text+= alphabet_array[zone_index] + "   "+d.getUTCHours()+" : "+d.getUTCMinutes()+" : "+d.getUTCSeconds()+"\n";
+                        const d = new Date(Date.now() + delay*3600000);
+                        const am_pm = 'am';
+                        if(d.getUTCHours() >= 12)
+                            am_pm='pm';
+
+                        date_text+= alphabet_array[zone_index] + "   "+zeroPad(d.getUTCHours(),2)+" : "+zeroPad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
                         zone_index++;
                     });
 
@@ -97,6 +101,7 @@ module.exports = async (client, reaction, user) => {
                         for(var vc1=0;vc1 < zone_list.length;vc1++){
                             await msg_r.react(alphabet_array[vc1]);
                         }
+                        
                         msg_r.awaitReactions(filter,{
                             max: 1,
                             time: 60000,
@@ -104,15 +109,20 @@ module.exports = async (client, reaction, user) => {
                         }).then(coll=>{
                             let thisReaction = coll.first();
                             let zone_sel=zone_list[alphabet_reactions[thisReaction.emoji.name]];
-                            client.updateProfile(user,{tz_offset:zone_sel})
+                            client.updateProfile(user,{tz_offset:zone_sel});
                             embed2.setFooter("If incorrect, contact server admin")
                             .setTitle("Selected: "+zone_sel)
                             .setDescription("");
-                            msg_r.edit(embed2);
-                            msg_r.reactions.removeAll();
+                            msg_r.delete();
+                            msg_r.channel.send(embed2);
                         }).catch(e=>{
-                            msg_r.reactions.removeAll();
-                        })
+                            embed2.setFooter("")
+                            .setTitle("Expired, please assign again in the server!")
+                            .setDescription("");
+                            msg_r.delete();
+                            msg_r.channel.send(embed2);
+                        });
+                        
                     });
                 }
             }

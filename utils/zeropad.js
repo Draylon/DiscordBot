@@ -1,0 +1,1 @@
+module.exports = (num, places) => String(num).padStart(places, '0');

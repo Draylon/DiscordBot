@@ -1,6 +1,6 @@
 
 const {DateParser} = require('../utils');
-const zeroPad = (num, places) => String(num).padStart(places, '0');
+const zeroPad = require('../utils/zeropad');
 const {MessageEmbed} = require('discord.js');
 const randomColor = require('random-color');
 

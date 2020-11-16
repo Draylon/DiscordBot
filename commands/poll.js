@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const randomColor = require('random-color');
 const ProgressBar = require('../utils/Progress');
-const zeroPad = (num, places) => String(num).padStart(places, '0');
+const zeroPad = require('../utils/zeropad');
 
 const alphabet_reactions = require("../utils/alphabet_array");
 const menu_buttons = ['✅','❌'];

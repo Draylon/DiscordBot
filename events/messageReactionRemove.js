@@ -4,7 +4,7 @@ const {MessageEmbed} = require('discord.js');
 const ProgressBar = require('../utils/Progress');
 const alphabet_reactions = require('../utils/alphabet_object');
 const menu_buttons = ['✅','❌'];
-const zeroPad = (num, places) => String(num).padStart(places, '0');
+const zeroPad = require('../utils/zeropad');
 
 
 module.exports = async (client, reaction, user) => {

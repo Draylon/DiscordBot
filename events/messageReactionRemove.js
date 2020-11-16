@@ -81,6 +81,9 @@ module.exports = async (client, reaction, user) => {
                                     var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
                                     if(url_arr.includes(user.id+"p"+field_index))
                                         url_arr.splice(url_arr.indexOf(user.id+"p"+field_index),1);
+                                    else
+                                        break;
+                                    
                                     //console.log('http://a'+url_arr.join('-')+'a.com');
                                     embed.setURL('http://a'+url_arr.join('-')+'a.com');
                                     //console.log(embed.url);

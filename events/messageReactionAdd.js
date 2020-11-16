@@ -38,8 +38,8 @@ module.exports = async (client, reaction, user) => {
     // AVALIABLE ROLES
     // Adds/removes a user from a joinable role via the welcome
     if(message.channel.id === rolesChannel.id){
-        if(message.embed[0]){
-            if (alphabet_array.slice(0,3).includes(reaction.emoji.name) && message.embed[0].footer.text == 'Guild Role Selector') {
+        if(message.embeds.length > 0){
+            if (alphabet_array.slice(0,3).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Role Selector') {
                 switch (reaction.emoji.name) {
                     case '🇦':
                         const staffRole = message.guild.roles.cache.get('699581322477174825');
@@ -70,7 +70,7 @@ module.exports = async (client, reaction, user) => {
                 return;
                 
             
-            }else if (alphabet_array.slice(0,7).includes(reaction.emoji.name) && message.embed[0].footer.text == 'Guild Timezone Selector') {
+            }else if (alphabet_array.slice(0,7).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Timezone Selector') {
                 let zone_list = timezones_by_list[timezones_by_letter[reaction.emoji.name]],
                 date_text="",
                 zone_index=0;

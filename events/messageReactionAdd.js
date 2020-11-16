@@ -77,7 +77,7 @@ module.exports = async (client, reaction, user) => {
                     zone_index=0;
                     zone_list.forEach(delay => {
                         const d = new Date(Date.now() + delay*3600000);
-                        const am_pm = 'am';
+                        let am_pm = 'am';
                         if(d.getUTCHours() >= 12)
                             am_pm='pm';
 

@@ -29,16 +29,12 @@ module.exports = async (client, reaction, user) => {
 
         // WELCOME VERIFICATION
         // Verify a member once they have reacted to the message in the verify channel (gives them the Verified role)
-        if(message.channel.id === welcomeChannel.id)
+        if(message.channel.id === welcomeChannel.id){
             if (reaction.emoji.name === '✅') {
                 member.roles.add(message.guild.roles.cache.get('699580541577461801')).catch(console.error);
                 return reaction.users.remove(user.id).catch(console.error);
             }
-        
-
-        // AVALIABLE ROLES
-        // Adds/removes a user from a joinable role via the welcome
-        if(message.channel.id === rolesChannel.id){
+        }else if(message.channel.id === rolesChannel.id){
             if(message.embeds.length > 0){
                 if (alphabet_array.slice(0,3).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Role Selector') {
                     switch (reaction.emoji.name) {
@@ -72,6 +68,7 @@ module.exports = async (client, reaction, user) => {
                     
                 
                 }else if (alphabet_array.slice(0,7).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Timezone Selector') {
+                    if(member.roles.cache.has('777543869398253569')) return reaction.remove(user);
                     let zone_list = timezones_by_list[timezones_by_letter[reaction.emoji.name]],
                     date_text="",
                     zone_index=0;
@@ -126,10 +123,7 @@ module.exports = async (client, reaction, user) => {
                     });
                 }
             }
-        }
-
-
-        if(message.author.bot){
+        }else if(message.author.bot){
             //check ongoing polls
             if(message.embeds.length > 0){
                 let embed = message.embeds[0];

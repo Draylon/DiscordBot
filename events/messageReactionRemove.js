@@ -78,7 +78,6 @@ module.exports = async (client, reaction, user) => {
                                 break;
                                 default:
                                     const field_index = alphabet_reactions[reaction.emoji.name];
-                                
                                     var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
                                     if(url_arr.includes(user.id+"p"+field_index))
                                         url_arr.splice(url_arr.indexOf(user.id+"p"+field_index),1);

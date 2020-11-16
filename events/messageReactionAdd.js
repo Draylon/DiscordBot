@@ -77,7 +77,7 @@ module.exports = async (client, reaction, user) => {
                     zone_index=0;
                     zone_list.forEach(delay => {
                         const d = new Date(Date.now() - delay*3600000);
-                        date_text+= alphabet_array[zone_index] + "   "+d.getHours()+" : "+d.getMinutes()+" : "+d.getSeconds()+"\n";
+                        date_text+= alphabet_array[zone_index] + "   "+d.getUTCHours()+" : "+d.getUTCMinutes()+" : "+d.getUTCSeconds()+"\n";
                         zone_index++;
                     });
 
@@ -93,7 +93,7 @@ module.exports = async (client, reaction, user) => {
                     .setColor(0xdd9323)
                     .setFooter("Expires within 60 seconds");
                     
-                    member.user.send(embed2).then(async msg_r => {
+                    user.send(embed2).then(async msg_r => {
                         for(var vc1=0;vc1 < zone_list.length;vc1++){
                             await msg_r.react(alphabet_array[vc1]);
                         }
@@ -104,7 +104,7 @@ module.exports = async (client, reaction, user) => {
                         }).then(coll=>{
                             let thisReaction = coll.first();
                             let zone_sel=zone_list[alphabet_reactions[thisReaction.emoji.name]];
-                            client.updateProfile(member.user,{tz_offset:zone_sel})
+                            client.updateProfile(user,{tz_offset:zone_sel})
                             embed2.setFooter("If incorrect, contact server admin")
                             .setTitle("Selected: "+zone_sel)
                             .setDescription("");

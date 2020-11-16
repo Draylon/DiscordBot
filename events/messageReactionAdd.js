@@ -69,6 +69,7 @@ module.exports = async (client, reaction, user) => {
                 
                 }else if (alphabet_array.slice(0,7).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Timezone Selector') {
                     if(member.roles.cache.has('777543869398253569')) return reaction.remove(user);
+                    member.roles.add(message.guild.roles.cache.get('777543869398253569'));
                     let zone_list = timezones_by_list[timezones_by_letter[reaction.emoji.name]],
                     date_text="",
                     zone_index=0;

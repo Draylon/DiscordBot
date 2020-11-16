@@ -53,7 +53,7 @@ module.exports = async (client, reaction, user) => {
                                     if(user.id == embed.footer.text){
                                         message.reactions.removeAll();
                                         embed.author.name = 'POLL CONCLUDED!';
-                                        const title = embed.title.split(" |>");
+                                        const title = embed.title.split(" -  |  ");
                                         embed.setTitle(title[0]);
                                         embed.setFooter("");
                                         embed.setURL("");

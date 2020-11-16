@@ -132,6 +132,7 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
+                        console.log(user+" reacted!");
                         if(alphabet_array.concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
@@ -139,7 +140,7 @@ module.exports = async (client, reaction, user) => {
                                     if(user.id == embed.footer.text){
                                         message.reactions.removeAll();
                                         embed.author.name = 'POLL CONCLUDED!';
-                                        const title = embed.title.split(" |>");
+                                        const title = embed.title.split(" >");
                                         embed.setTitle(title[0]);
                                         embed.setFooter("");
                                         embed.setURL("");

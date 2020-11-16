@@ -1,9 +1,11 @@
 // òûûø×ƒááíó»ªº¿®¬½¼¡«»░▒▒▓│┤ÁÂÀ©╣║╗╝¢¥┐└┐┴┬├─┼ãÃ╚╔╩╦╠═╬¤ðÐÐÊËÈıÍÎÏ┘┌┌█▄¦
 // ¨·¹2³²¶¶■ ☺‼☻+,♣♠•◘○◙♂♀♪♫☼►◄↕‼¶§▬↨§6,↑ 
+const alphabet_reactions = require('../utils/alphabet_object');
 const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const { Cc_value,Cryptocurrency,Guild, Profile,Reminder } = require('../models');
+
 const { MessageEmbed } = require('discord.js');
 const randomColor = require('random-color');
 
@@ -130,7 +132,7 @@ module.exports = client => {
         const b = channel.guild.roles.cache.get('711218719652577381'); // UDESC
         const c = channel.guild.roles.cache.get('711659664743333949'); // Developer
 
-        const embed = new MessageEmbed()
+        const embed1 = new MessageEmbed()
             .setTitle('Available Roles')
             .setColor(0x1f3f52)
             //🇨 ${c.toString()}
@@ -144,14 +146,52 @@ module.exports = client => {
         
         `)
             .setColor(0xdd9323)
-            .setFooter(`Guild ID: ${channel.guild.id}`);
+            .setFooter(`Guild Role Selector`);
+            //.setFooter(`Guild ID: ${channel.guild.id}`);
 
-        channel.send(embed).then(async msg => {
+        channel.send(embed1).then(async msg => {
 
             await msg.react('🇦');
             await msg.react('🇧');
             await msg.react('🇨');
         });
+
+        // ==================================
+        
+
+        const embed2 = new MessageEmbed()
+            .setTitle('Time Zones')
+            .setColor(0x1f3f52)
+            //🇨 ${c.toString()}
+            .setDescription(`
+        
+            Select your region:
+
+        🇦     :earth_americas:     North America
+        🇧     :earth_africa:     Africa
+        🇨     :earth_asia:     Asia
+        🇩     :earth_americas:     South America
+        🇪     :earth_asia:     Oceania
+        🇫     :earth_americas:     Antarctica
+        🇬     :earth_asia:     Europe
+
+        You will receive a DM with the exact timezone to select.
+        
+        `)
+        .setColor(0xdd9323)
+        .setFooter("Guild Timezone Selector");
+
+        channel.send(embed2).then(async msg => {
+
+            await msg.react('🇦');
+            await msg.react('🇧');
+            await msg.react('🇨');
+            await msg.react('🇩');
+            await msg.react('🇪');
+            await msg.react('🇫');
+            await msg.react('🇬');
+        });
+        
     };
 
     // ====  DATABASE ====

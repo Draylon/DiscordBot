@@ -3,7 +3,7 @@ const randomColor = require('random-color');
 const ProgressBar = require('../utils/Progress');
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
-const alphabet_reactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬','🇭','🇮','🇯','🇰','🇱','🇲','🇳','🇴','🇵','🇶','🇷','🇸','🇹','🇺','🇻','🇼','🇽','🇾','🇿'];
+const alphabet_reactions = require("../utils/alphabet_array");
 const menu_buttons = ['✅','❌'];
 exports.run = (client, message, args) => {
     const general_filter = (reaction, user) => alphabet_reactions.concat(menu_buttons).includes(reaction.emoji.name);

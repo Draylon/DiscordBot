@@ -1,0 +1,20 @@
+module.exports = {
+  "timezones_by_list":{
+    "north_america":[-3,-3.5,-4,-5,-6,-7,-8,-9,-10],
+    "africa":[-1,0,1,2,3,4],
+    "asia":[9,8,7,6.5,6,5.75,5.5,5,4.5,4,3.5,3,2],
+    "antarctica":[-2,5],
+    "europe":[11,10,9,8,7,6,5,3,2,1,0],
+    "oceania":[14,13.75,13,12,11.5,11,10.5,10,9.5,9,8,7,-8,-10,-11],
+    "south_america":[-2,-3,-4,-4,5,-5,-6]
+  },
+  "timezones_by_letter":{
+    "🇦":"north_america",
+    "🇧":"africa",
+    "🇨":"asia",
+    "🇩":"south_america",
+    "🇪":"oceania",
+    "🇫":"antarctica",
+    "🇬":"europe"
+  }
+};

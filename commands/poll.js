@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const randomColor = require('random-color');
 const ProgressBar = require('../utils/Progress');
-const zeroPad = require('../utils/zeropad');
 
 const alphabet_reactions = require("../utils/alphabet_array");
 const menu_buttons = ['✅','❌'];
@@ -23,7 +22,7 @@ exports.run = (client, message, args) => {
     .setAuthor('ONGOING POLL')
     .setFooter(`${message.author.id}`)
     .setURL(`http://aa.com`)
-    .setTitle(poll_items[0].trim()+" |>  0 votes  <|");
+    .setTitle(poll_items[0].trim()+" -  |  0 votes  |");
     poll_items.splice(0,1);
     poll_items.forEach(element => {
         const pbar = ProgressBar({

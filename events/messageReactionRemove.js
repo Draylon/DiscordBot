@@ -4,7 +4,7 @@ const {MessageEmbed} = require('discord.js');
 const ProgressBar = require('../utils/Progress');
 const alphabet_reactions = require('../utils/alphabet_object');
 const menu_buttons = ['✅','❌'];
-const zeroPad = require('../utils/zeropad');
+const {spacePad} = require('../utils/paddings');
 
 
 module.exports = async (client, reaction, user) => {
@@ -106,7 +106,7 @@ module.exports = async (client, reaction, user) => {
                                             width:55,
                                             total: Math.max(voteCount,1)
                                         });
-                                        embed.fields[field_ind].value = `${zeroPad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
+                                        embed.fields[field_ind].value = `${spacePad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
                                     });
                             }
                             message.edit(embed).then(msg_d=>{

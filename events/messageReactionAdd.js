@@ -5,7 +5,7 @@ const alphabet_reactions = require('../utils/alphabet_object');
 const alphabet_array = require('../utils/alphabet_array');
 const {timezones_by_list,timezones_by_letter} = require('../utils/timezones')
 const menu_buttons = ['✅','❌'];
-const zeroPad = require('../utils/zeropad');
+const {spacePad} = require('../utils/paddings');
 
 
 module.exports = async (client, reaction, user) => {
@@ -79,7 +79,7 @@ module.exports = async (client, reaction, user) => {
                         if(d.getUTCHours() >= 12)
                             am_pm='pm';
 
-                        date_text+= alphabet_array[zone_index] + "   "+zeroPad(d.getUTCHours(),2)+" : "+zeroPad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
+                        date_text+= alphabet_array[zone_index] + "   "+spacePad(d.getUTCHours(),2)+" : "+spacePad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
                         zone_index++;
                     });
 
@@ -192,7 +192,7 @@ module.exports = async (client, reaction, user) => {
                                         }
                                     });
                                     const title = embed.title.split(" |>");
-                                    embed.setTitle(title[0]+" |>  "+voteCount+" votes  <|");
+                                    embed.setTitle(title[0]+" -  |  "+voteCount+" votes  |");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
                                     for(var ind_entry=0;ind_entry < voteIndKey.length;ind_entry++){
                                         const field_ind = alphabet_reactions[voteIndKey[ind_entry]];
@@ -204,7 +204,7 @@ module.exports = async (client, reaction, user) => {
                                             width:55,
                                             total: Math.max(voteCount,1)
                                         });
-                                        embed.fields[field_ind].value = `${zeroPad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
+                                        embed.fields[field_ind].value = `${spacePad(pbar.percent,3)}%` +" `"+pbar.bar+"`";
                                     }
                             }
                             message.edit(embed).then(msg_d=>{

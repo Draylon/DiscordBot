@@ -132,7 +132,6 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
-                        console.log(user+" reacted!");
                         if(alphabet_array.concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
@@ -145,7 +144,7 @@ module.exports = async (client, reaction, user) => {
                                         embed.setFooter("");
                                         embed.setURL("");
                                         embed.fields.forEach(field=>{
-                                            field.name = field.name + " ended in "+parseInt(field.value.slice(0,3)).toString()+"%";
+                                            field.name = field.name + " ended in "+parseInt(field.value.slice(1,4)).toString()+"%";
                                             field.value = "────────────────────────";
                                         });
 
@@ -166,28 +165,31 @@ module.exports = async (client, reaction, user) => {
                                 break;
                                 default:
                                     const field_index = alphabet_reactions[reaction.emoji.name];
-                                
-                                    var url_st = embed.url.slice(8,embed.url.length-5),
+                                    /*var url_st = embed.url.slice(8,embed.url.length-5),
                                     url_names = url_st.split('-');
                                     let breakk=false;
                                     for(var ccp1=0;ccp1<url_names.length;ccp1++){
                                         if(url_names[ccp1].split('p')[0] == user.id){
                                             breakk=true;
-                                            break;
-                                        }
+                                            break;}
                                     }
-                                    if(breakk){
-                                        reaction.users.remove(user);
-                                        break;
-                                    }
-
-                                    url_names.push(user.id+"p"+field_index);
-                                    embed.setURL('http://a'+url_names.join('-')+'a.com');
-                                    //console.log(embed.url);
+                                    if(breakk){reaction.users.remove(user);
+                                        break;}
+                                    if(embed.url.length-5 == 8)
+                                        url_names[0] = user.id+"p"+field_index;
+                                    else url_names.push(user.id+"p"+field_index);
+                                    embed.setURL('http://a'+url_names.join('-')+'a.com');*/
+                                    
                                     var voteCount = 0,
+                                    break_c=0,
                                     voteIndKey=[],
                                     voteIndValue=[];
                                     message.reactions.cache.forEach(iter_reaction=>{
+                                        if(iter_reaction.users.cache.has(user.id)){
+                                            break_c++;
+                                            if(break_c >= 2)
+                                                return reaction.users.remove(user);
+                                        }
                                         if(alphabet_reactions[iter_reaction.emoji.name] != undefined){
                                             voteIndKey.push(iter_reaction.emoji.name);
                                             voteIndValue.push(iter_reaction.count-1);

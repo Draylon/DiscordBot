@@ -47,7 +47,6 @@ module.exports = async (client, reaction, user) => {
                 let embed = message.embeds[0];
                 if(embed.author){
                     if(embed.author.name == 'ONGOING POLL'){
-                        console.log(user+" removed reaction!");
                         if(alphabet_array.concat(menu_buttons).includes(reaction.emoji.name)){
                             let cancelled=false;
                             switch(reaction.emoji.name){
@@ -60,7 +59,7 @@ module.exports = async (client, reaction, user) => {
                                         embed.setFooter("");
                                         embed.setURL("");
                                         embed.fields.forEach(field=>{
-                                            field.name = field.name + " ended in "+parseInt(field.value.slice(0,3)).toString()+"%";
+                                            field.name = field.name + " ended in "+parseInt(field.value.slice(1,4)).toString()+"%";
                                             field.value = "────────────────────────";
                                         });
                                     }else
@@ -80,31 +79,30 @@ module.exports = async (client, reaction, user) => {
                                 break;
                                 default:
                                     const field_index = alphabet_reactions[reaction.emoji.name];
-                                    var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
+                                    /*var url_arr=embed.url.slice(8,embed.url.length-5).split('-');
                                     if(url_arr.includes(user.id+"p"+field_index))
                                         url_arr.splice(url_arr.indexOf(user.id+"p"+field_index),1);
                                     else
                                         break;
-                                    
-                                    //console.log('http://a'+url_arr.join('-')+'a.com');
-                                    embed.setURL('http://a'+url_arr.join('-')+'a.com');
-                                    //console.log(embed.url);
+                                    embed.setURL('http://a'+url_arr.join('-')+'a.com');*/
                                     
                                     var voteCount = 0,
-                                    voteIndividual={};
+                                    voteIndKey=[],
+                                    voteIndValue=[];
                                     message.reactions.cache.forEach(iter_reaction=>{
                                         if(alphabet_reactions[iter_reaction.emoji.name] != undefined){
-                                            voteIndividual[iter_reaction.emoji.name]=iter_reaction.count-1;
+                                            voteIndKey.push(iter_reaction.emoji.name);
+                                            voteIndValue.push(iter_reaction.count-1);
                                             voteCount+=iter_reaction.count-1;
                                         }
                                     });
                                     const title = embed.title.split(" -  |  ");
                                     embed.setTitle(title[0]+" -  |  "+voteCount+" votes  |");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
-                                    Object.entries(voteIndividual).forEach(entry =>{
-                                        const field_ind = alphabet_reactions[entry[0]];
+                                    for(var ind_entry=0;ind_entry < voteIndKey.length;ind_entry++){
+                                        const field_ind = alphabet_reactions[voteIndKey[ind_entry]];
                                         const pbar = ProgressBar({
-                                            curr:entry[1],
+                                            curr:voteIndValue[ind_entry],
                                             incomplete:'_',
                                             complete: ':',
                                             head: '#',
@@ -112,7 +110,7 @@ module.exports = async (client, reaction, user) => {
                                             total: Math.max(voteCount,1)
                                         });
                                         embed.fields[field_ind].value = "`"+`${spacePad(pbar.percent,3)}%` +" "+pbar.bar+"`";
-                                    });
+                                    };
                             }
                             message.edit(embed).then(msg_d=>{
                                 if(cancelled)

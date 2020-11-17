@@ -21,7 +21,7 @@ exports.run = (client, message, args) => {
     .setColor(randomColor().hexString())
     .setAuthor('ONGOING POLL')
     .setFooter(`${message.author.id}`)
-    .setURL(`http://aa.com`)
+    //.setURL(`http://aa.com`)
     .setTitle(poll_items[0].trim()+" -  |  0 votes  |");
     poll_items.splice(0,1);
     poll_items.forEach(element => {

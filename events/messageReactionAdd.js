@@ -5,7 +5,7 @@ const alphabet_reactions = require('../utils/alphabet_object');
 const alphabet_array = require('../utils/alphabet_array');
 const {timezones_by_list,timezones_by_letter} = require('../utils/timezones')
 const menu_buttons = ['✅','❌'];
-const {spacePad} = require('../utils/paddings');
+const {spacePad,zeroPad} = require('../utils/paddings');
 
 
 module.exports = async (client, reaction, user) => {
@@ -81,7 +81,7 @@ module.exports = async (client, reaction, user) => {
                             am_pm='pm';
                             if(hour_p > 12)hour_p-=12;}
 
-                        date_text+= alphabet_array[zone_index] + "   "+spacePad(hour_p,2)+" : "+spacePad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
+                        date_text+= alphabet_array[zone_index] + "   "+zeroPad(hour_p,2)+" : "+zeroPad(d.getUTCMinutes(),2)+" "+am_pm+"\n";
                         zone_index++;
                     });
 

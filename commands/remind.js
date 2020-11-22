@@ -1,6 +1,6 @@
 
 const {DateParser} = require('../utils');
-const {spacePad} = require('../utils/paddings');
+const {zeroPad} = require('../utils/paddings');
 const {MessageEmbed} = require('discord.js');
 const randomColor = require('random-color');
 
@@ -95,7 +95,7 @@ exports.run = async (client, message, args) => {
             .setTitle("Reminder Created!")
             .setDescription(`${descText}`)
             .setColor(randomColor().hexString())
-            .addField("Date",`${spacePad(d.getUTCDate(),2)}/${spacePad(d.getUTCMonth()+1,2)}/${d.getUTCFullYear()} at ${spacePad(dHour,2)}:${spacePad(d.getUTCMinutes(),2)}:${spacePad(d.getUTCSeconds(),2)} ${am}`)
+            .addField("Date",`${zeroPad(d.getUTCDate(),2)}/${zeroPad(d.getUTCMonth()+1,2)}/${d.getUTCFullYear()} at ${zeroPad(dHour,2)}:${zeroPad(d.getUTCMinutes(),2)}:${zeroPad(d.getUTCSeconds(),2)} ${am}`)
             .addField("Remind: ",topic)
             .setFooter(`${createdReminder._id}`);
         message.channel.send(embed).then(async msg_react=>{

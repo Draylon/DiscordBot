@@ -1,14 +1,18 @@
 const fetch = require('node-fetch');
 const asciiChart = require('asciichart');
 const { MessageEmbed } = require('discord.js');
+const alphabet_array = require('../utils/alphabet_array');
+const alphabet_obj = require('../utils/alphabet_object');
+
 
 exports.run = async (client, message, args) => {
     await message.delete().catch(O_o=>{});
-    if(args.length < 1)
-        return message.channel.send("Too few arguments!");
-    var coin_name = args[0],
+    //return message.channel.send("Too few arguments!");
+    var coin_name = "",
     image_link = "",
     color = 0x000;
+    if(args.length > 0)
+        coin_name=[args[0]];
 
     const filter = (reaction, user) => ['❌','📈','🇦', '🇧', '🇨'].includes(reaction.emoji.name) && user.id === message.author.id;
     if(coin_name == ''){

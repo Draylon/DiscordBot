@@ -41,7 +41,7 @@ module.exports = async (client, reaction, user) => {
                         case '🇦':
                             const staffRole = message.guild.roles.cache.get('699581322477174825');
                             const staffApply = message.guild.roles.cache.get('777497759154569246');
-                            if(member.roles.has(staffRole) || member.roles.has(staffApply))
+                            if(member.roles.cache.has(staffRole) || member.roles.cache.has(staffApply))
                                 return reaction.users.remove(user.id).catch(console.error);
                             member.roles.add(staffApply);
                             let embedd = new MessageEmbed()

@@ -37,12 +37,11 @@ module.exports = async (client, reaction, user) => {
         }else if(message.channel.id === rolesChannel.id){
             if(message.embeds.length > 0){
                 if (alphabet_array.slice(0,3).includes(reaction.emoji.name) && message.embeds[0].footer.text == 'Guild Role Selector') {
-                    console.log("Guild role interaction");
                     switch (reaction.emoji.name) {
                         case '🇦':
                             const staffRole = message.guild.roles.cache.get('699581322477174825');
                             const staffApply = message.guild.roles.cache.get('777497759154569246');
-                            if(member.roles.has('699581322477174825') || member.roles.has('777497759154569246'))
+                            if(member.roles.has(staffRole) || member.roles.has(staffApply))
                                 return reaction.users.remove(user.id).catch(console.error);
                             member.roles.add(staffApply);
                             let embedd = new MessageEmbed()

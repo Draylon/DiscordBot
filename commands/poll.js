@@ -18,7 +18,6 @@ exports.run = (client, message, args) => {
     pollCancelled=false;
 
     let poll_title_s = poll_items[0].trim().split(new RegExp("<|>"));
-    poll_title=poll_title_s[0];
     for(var iii=1;iii < poll_title_s.length;iii+=2){
         userName=poll_title_s[iii][1];
         if(userName.length == 20){

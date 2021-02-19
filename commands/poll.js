@@ -23,10 +23,16 @@ exports.run = (client, message, args) => {
         if(userName.length == 20){
             if(userName[1] == '&'){
                 const gld = message.guild.roles.cache.get(userName.slice(2,-1));
-                poll_title_s[iii]="@"+gld.name;
+                if(gld!=undefined)
+                    poll_title_s[iii]="@"+gld.name;
+                else
+                    poll_title_s[iii]="@"+userName.slice(2,-1);
             }else if(userName[1] == '!'){
                 const gld = message.guild.members.cache.get(userName.slice(2,-1));
-                poll_title_s[iii]="@"+gld.nickname;
+                if(gld!=undefined)
+                    poll_title_s[iii]="@"+gld.nickname;
+                else
+                    poll_title_s[iii]="@"+userName.slice(2,-1);
             }
         }
     }

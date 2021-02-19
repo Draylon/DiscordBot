@@ -19,12 +19,12 @@ exports.run = (client, message, args) => {
 
     var poll_title_s = poll_items[0].trim().split(new RegExp("<|>"));
     for(var iii=1;iii < poll_title_s.length;iii+=2){
-        char_=poll_title_s[iii][1];
+        userName=poll_title_s[iii];
         if(userName.length == 20){
-            if(char_ == '&'){
+            if(userName[1] == '&'){
                 const gld = message.guild.roles.cache.get(userName.slice(2,-1));
                 poll_title_s[iii]="@"+gld.name;
-            }else if(char_ == '!'){
+            }else if(userName[1] == '!'){
                 const gld = message.guild.members.cache.get(userName.slice(2,-1));
                 poll_title_s[iii]="@"+gld.nickname;
             }

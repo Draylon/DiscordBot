@@ -19,7 +19,7 @@ exports.run = (client, message, args) => {
 
     let poll_title_s = poll_items[0].trim().split(new RegExp("<|>"));
     poll_title=poll_title_s[0];
-    for(var iii=1;iii < poll_title;iii+=2){
+    for(var iii=1;iii < poll_title_s.length;iii+=2){
         userName=poll_title_s[iii][1];
         if(userName.length == 20){
             if(userName[2] == '&'){

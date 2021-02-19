@@ -196,7 +196,10 @@ module.exports = async (client, reaction, user) => {
                                             voteCount+=iter_reaction.count-1;
                                         }
                                     });
-                                    const title = embed.title.split(" -  |  ");
+                                    const title_sp = embed.title.split(" -  |  ");
+                                    var title="";
+                                    for(var iii=0;iii < title_sp.length-1;iii++)
+                                        title+=title_sp[iii];
                                     embed.setTitle(title[0]+" -  |  "+voteCount+" votes  |");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
                                     for(var ind_entry=0;ind_entry < voteIndKey.length;ind_entry++){

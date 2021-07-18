@@ -200,7 +200,7 @@ module.exports = async (client, reaction, user) => {
                                     var title="";
                                     for(var iii=0;iii < title_sp.length-1;iii++)
                                         title+=title_sp[iii];
-                                    embed.setTitle(title[0]+" -  |  "+voteCount+" votes  |");
+                                    embed.setTitle(title+" -  |  "+voteCount+" votes  |");
                                     //console.log(`cf: ${field_index} nlen:${nlen} total:${voteCount}`)
                                     for(var ind_entry=0;ind_entry < voteIndKey.length;ind_entry++){
                                         const field_ind = alphabet_reactions[voteIndKey[ind_entry]];

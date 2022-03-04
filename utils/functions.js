@@ -43,6 +43,7 @@ module.exports = client => {
             .then(console.log(`Default settings saved for guild "${merged.guildName}" (${merged.guildID})`));
     };
 
+
     client.createProfile = async profile => {
         const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, profile);
         const newProfile = await new Profile(merged);
@@ -87,6 +88,8 @@ module.exports = client => {
         return await profile.updateOne(profile); 
     };
 
+
+
     client.clean = text => {
         if (typeof(text) === "string") {
             return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
@@ -115,12 +118,25 @@ module.exports = client => {
             .setAuthor(channel.guild.name,channel.guild.iconURL)
             .setColor(0x1f3f52)
             .setTitle("Welcome to "+channel.guild.name)
-            .setDescription("`"+
+            .setDescription(
+                "`"+
+                "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁\n"+
+                "⡎╔═════════════════════════════════╗⢱\n"+
+                "⡇║┌───────────────────────────────┐║⢸\n"+
+                "⡃╚╝          Reagir com           ╚╝⢘\n"+
+                "⠀        >>      ✅      <<        \n"+
+                "⡅╔╗         Para Entrar.          ╔╗⢨\n"+
+                "⡇║└───────────────────────────────┘║⢸\n"+
+                "⢇╚═════════════════════════════════╝⡸\n"+
+                "──────────────────────────────────"+
+                "`"
+            )
+            /* .setDescription("`"+
                 "╔══════════════════════════════╗\n"+
                 "║                              ║\n"+
                 "╠  >>  click ✅ to verify  <<  ╣\n"+
                 "║                              ║\n"+
-                "╚══════════════════════════════╝`")
+                "╚══════════════════════════════╝`") */
             .setImage("https://media.tenor.com/images/d0c157935d6144d45c48d5a3053ab118/tenor.gif");
 
         channel.send(embed).then(async msg => {
@@ -293,6 +309,7 @@ module.exports = client => {
 
 
     // ============================
+    // =====   REMINDER    ========
 
     client.createReminder = async reminder => {
         const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, reminder);
@@ -334,4 +351,8 @@ module.exports = client => {
         });
         
     };
+
+    //============================
+
+
 };

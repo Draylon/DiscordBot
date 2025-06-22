@@ -13,6 +13,12 @@ Website: https://thenerdcave.us
 
 Want to contribute or submit requests for new videos! Join the [Discord](https://discord.gg/g7wr8xb) or send us an [email](mailto:contact@thenerdcave.us)!
 
+## Environment Variables
+
+The bot requires a MongoDB connection string provided through the
+`MONGO_URI` environment variable. Create a `.env` file or otherwise set
+this variable before starting the bot.
+
 # To-Do List:
 
 #### Enhance current help system

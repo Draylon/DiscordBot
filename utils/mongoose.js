@@ -12,8 +12,12 @@ module.exports = {
             family: 4
         };
 
-        //mongoose.connect('mongodb://localhost:27017/stonks', dbOptions);
-        mongoose.connect('mongodb+srv://admin:'+process.env.MONGO_PW+'@cluster0.w3ynl.mongodb.net/DogeBot_SQL?retryWrites=true&w=majority', dbOptions);
+        // Support configuring the connection string through environment
+        // variables.  This makes it easier to spin up the bot with a new
+        // database without touching the source code.
+        const { mongoURI } = require('../config');
+
+        mongoose.connect(mongoURI, dbOptions);
         mongoose.set('useFindAndModify', false);
         mongoose.Promise = global.Promise;
         

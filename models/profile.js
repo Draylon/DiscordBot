@@ -7,6 +7,11 @@ const profileSchema = mongoose.Schema({
     userID: String,
     username: String,
     joinDate: Number,
+    // Preferred timezone offset from UTC used for reminders
+    tz_offset: {
+        type: Number,
+        default: 0
+    },
     coins: {
         type: Number,
         default: 0

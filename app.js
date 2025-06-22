@@ -38,7 +38,7 @@ fs.readdir('./commands/', async (err, files) => {
 
 
 client.mongoose.init();
-print("Mongoose connection initialized");
+console.log("Mongoose connection initialized");
 client.login();
-print("Discord client logged in");
-print("Bot is ready");
+console.log("Discord client logged in");
+console.log("Bot is ready");

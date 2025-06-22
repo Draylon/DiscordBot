@@ -1,28 +1,21 @@
 const { MessageEmbed } = require('discord.js');
+const { registerUser } = require('../utils');
 
 exports.run = async (client, message, args) => {
     const member = message.member;
-    const exists = await client.profileExists(member.id);
-
-    if (exists) {
-        return message.channel.send('You are already registered.');
-    }
-
-    const profile = {
-        guildID: member.guild.id,
-        guildName: member.guild.name,
-        userID: member.id,
-        username: member.user.tag,
-        joinDate: Date.now()
-    };
 
     // allow optional timezone offset argument
+    let offset = 0;
     if (args.length > 0) {
-        const offset = parseFloat(args[0]);
-        if (!isNaN(offset)) profile.tz_offset = offset;
+        const parsed = parseFloat(args[0]);
+        if (!isNaN(parsed)) offset = parsed;
     }
 
-    await client.createProfile(profile);
+    const created = await registerUser(client, member, offset);
+
+    if (!created) {
+        return message.channel.send('You are already registered.');
+    }
 
     const embed = new MessageEmbed()
         .setTitle('Registration complete')

@@ -58,17 +58,12 @@ module.exports = async (client, message) => {
 };
 
 async function updateCoins(client, member, amount) {
-    const newProfile = {
-        guildID: member.guild.id,
-        guildName: member.guild.name,
-        userID: member.id,
-        username: member.user.tag,
-        joinDate: Date.now()
-    };
+    const { registerUser } = require('../utils');
 
     const profile = await client.getProfile(member);
-    if (!profile) await client.createProfile(newProfile);
-    const newAmount = profile ? profile.coins + amount : amount;
+    if (!profile) await registerUser(client, member);
+    const current = profile ? profile.coins : 0;
+    const newAmount = current + amount;
     await client.updateProfile(member, { coins: newAmount });
     //console.log(`Updated: ${newAmount}`);
 }

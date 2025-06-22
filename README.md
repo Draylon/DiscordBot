@@ -19,6 +19,18 @@ The bot requires a MongoDB connection string provided through the
 `MONGO_URI` environment variable. Create a `.env` file or otherwise set
 this variable before starting the bot.
 
+## Docker
+
+A simple `Dockerfile` is included for running the bot in a container:
+
+```bash
+# build the image
+docker build -t discord-bot .
+
+# run the bot with the required environment variables
+docker run -e DISCORD_TOKEN=your-token -e MONGO_URI=your-mongo-uri discord-bot
+```
+
 # To-Do List:
 
 #### Enhance current help system

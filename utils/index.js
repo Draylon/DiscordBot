@@ -3,5 +3,6 @@ module.exports = {
     ProgressBar: require('./Progress'),
     Timezones: require('./timezones'),
     AlphabetObject: require("./alphabet_object"),
-    AlphabetArray: require('./alphabet_array')
+    AlphabetArray: require('./alphabet_array'),
+    registerUser: require('./registerUser')
 };

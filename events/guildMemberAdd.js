@@ -1,19 +1,11 @@
+const { registerUser } = require('../utils');
+
 module.exports = async (client, member) => {
 
-    const newProfile = {
-        guildID: member.guild.id,
-        guildName: member.guild.name,
-        userID: member.id,
-        username: member.user.tag,
-        joinDate: Date.now()
-    };
-    
     try {
-        const exists = await client.profileExists(newProfile.userID);
-        if(!exists){
-            await client.createProfile(newProfile);
-        }else{
-            console.log(newProfile.username+" Rejoined!");
+        const created = await registerUser(client, member);
+        if (!created) {
+            console.log(member.user.tag + " Rejoined!");
         }
 
     } catch (err) {

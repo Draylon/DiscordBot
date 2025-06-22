@@ -6,6 +6,7 @@ const alphabet_array = require('../utils/alphabet_array');
 const {timezones_by_list,timezones_by_letter} = require('../utils/timezones')
 const menu_buttons = ['✅','❌'];
 const {spacePad,zeroPad} = require('../utils/paddings');
+const { registerUser } = require('../utils');
 
 
 module.exports = async (client, reaction, user) => {
@@ -14,6 +15,9 @@ module.exports = async (client, reaction, user) => {
 
     if(message.channel.guild){
         const member = message.channel.guild.members.cache.get(user.id);
+
+        // ensure a profile exists for the reacting user
+        await registerUser(client, member);
 
         if (member.user.bot) return;
         
